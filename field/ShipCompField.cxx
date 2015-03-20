@@ -42,7 +42,6 @@ void ShipCompField::Field(const Double_t* position, Double_t* B)
 {
 
     // Loop over the fields and do a simple linear superposition
-    std::cout<<"Here"<<std::endl;
 
     // First initialise the field components to zero
     B[0] = 0.0, B[1] = 0.0, B[2] = 0.0;
@@ -53,20 +52,19 @@ void ShipCompField::Field(const Double_t* position, Double_t* B)
 	TVirtualMagField* theField = *iter;
 	if (theField) {
 
-	    std::cout<<"Finding field for "<<theField->GetName()<<std::endl;
+	    //std::cout<<"Finding field for "<<theField->GetName()<<std::endl;
 
 	    // Find the magnetic field components for this part
 	    Double_t BVect[3] = {0.0, 0.0, 0.0};
 	    theField->Field(position, BVect);
 	    
-	    std::cout<<"Here2"<<std::endl;
-
 	    // Superposition of the B field components
 	    B[0] += BVect[0];
 	    B[1] += BVect[1];
 	    B[2] += BVect[2];
 
-	    std::cout<<"B = "<<B[0]<<", "<<B[1]<<", "<<B[2]<<std::endl;
+	    //std::cout<<"B = "<<B[0]<<", "<<B[1]<<", "<<B[2]<<std::endl;
+
 	}
 
     }
