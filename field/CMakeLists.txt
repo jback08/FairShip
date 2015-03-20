@@ -22,6 +22,8 @@ ShipConstField.cxx
 ShipFieldCreator.cxx 
 ShipFieldPar.cxx
 ShipBellField.cxx
+ShipBFieldMap.cxx
+ShipCompField.cxx
 )
 
 set(LINKDEF FieldLinkDef.h)
