@@ -3,7 +3,7 @@
 # The extension is already found.  Any number of sources could be listed here.
 
 set(INCLUDE_DIRECTORIES
-${CMAKE_SOURCE_DIR}/field 
+${CMAKE_SOURCE_DIR}/field
 )
 
 include_directories( ${INCLUDE_DIRECTORIES})
@@ -24,6 +24,7 @@ ShipFieldPar.cxx
 ShipBellField.cxx
 ShipBFieldMap.cxx
 ShipCompField.cxx
+ShipFieldMaker.cxx
 )
 
 set(LINKDEF FieldLinkDef.h)

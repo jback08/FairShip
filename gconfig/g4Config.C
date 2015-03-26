@@ -43,6 +43,11 @@ void Config()
    //  geant4->SetExternalDecayer(decayer);
    //}
   
+   /// Set the fields (global and/or local to the TGeo volumes)
+   cout << "Trying to make the magnetic fields..." << endl;
+   ShipFieldMaker* fieldMaker = new ShipFieldMaker();
+   fieldMaker->makeFields("control.txt");
+
 /// Customise Geant4 setting
 /// (verbose level, global range cut, ..)
 
@@ -50,7 +55,7 @@ void Config()
    configm1 = configm + "/gconfig/g4config.in";
    cout << " -I g4Config() using g4conf  macro: " << configm1 << endl;
    //set geant4 specific stuff
-  geant4->SetMaxNStep(10000);  // default is 30000
-  geant4->ProcessGeantMacro(configm1.Data());
+   geant4->SetMaxNStep(10000);  // default is 30000
+   geant4->ProcessGeantMacro(configm1.Data());
 
 }

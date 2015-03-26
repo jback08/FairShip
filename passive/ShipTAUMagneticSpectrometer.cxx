@@ -53,8 +53,8 @@ void ShipTAUMagneticSpectrometer::ConstructGeometry()
     
     Double_t d = 0;
     
-    TGeoUniformMagField *magField = new TGeoUniformMagField(0.,-MagneticField,0.);
-    TGeoUniformMagField *RetField     = new TGeoUniformMagField(0.,MagneticField,0.);
+    //TGeoUniformMagField *magField = new TGeoUniformMagField(0.,-MagneticField,0.);
+    //TGeoUniformMagField *RetField     = new TGeoUniformMagField(0.,MagneticField,0.);
     
     TGeoBBox *Layer = new TGeoBBox(225,400,IronLenght/2);
     TGeoVolume *volLayer = new TGeoVolume("volLayer",Layer,Fe);
@@ -63,7 +63,7 @@ void ShipTAUMagneticSpectrometer::ConstructGeometry()
         d = zLastSlab - i*(IronLenght+AirLenght);
         top->AddNode(volLayer,i,new TGeoTranslation(0, 0, d));
     }
-    volLayer->SetField(magField);
+    //volLayer->SetField(magField);
     
     cout <<"************************************" << endl;
     cout << " IronLenght+AirLenght = " << IronLenght+AirLenght << endl;
@@ -79,7 +79,7 @@ void ShipTAUMagneticSpectrometer::ConstructGeometry()
         Double_t d2 = d1-i*(IronLenght+AirLenght);
         top->AddNode(volLayer2,i,new TGeoTranslation(0, 0, d2));
     }
-    volLayer2->SetField(RetField);
+    //volLayer2->SetField(RetField);
     
     cout <<"************************************" << endl;
     

@@ -1,5 +1,5 @@
 /*! \class ShipBFieldMap
-  \brief Class that defines a (3d) magnetic field map
+  \brief Class that defines a (3d) magnetic field map. Distances in cm, fields in Tesla
 
   \author John Back <J.J.Back@warwick.ac.uk>
 */
@@ -14,8 +14,7 @@ ShipBFieldMap::ShipBFieldMap(const std::string& label,
 			     Double_t xOffset,
 			     Double_t yOffset,
 			     Double_t zOffset,
-			     Double_t LUnit,
-			     Double_t BUnit) : 
+			     Double_t BScale) : 
     TVirtualMagField(label.c_str()),
     fieldMap_(new std::vector<TVector3>()),
     mapFileName_(mapFileName),
@@ -28,11 +27,10 @@ ShipBFieldMap::ShipBFieldMap(const std::string& label,
     dy_(0.0), yRange_(0.0),
     zMin_(0.0), zMax_(0.0), 
     dz_(0.0), zRange_(0.0),
-    xOffset_(xOffset*LUnit), 
-    yOffset_(yOffset*LUnit),
-    zOffset_(zOffset*LUnit),
-    LUnit_(LUnit),
-    BUnit_(BUnit)
+    xOffset_(xOffset), 
+    yOffset_(yOffset),
+    zOffset_(zOffset),
+    BScale_(BScale)
 {
     this->initialise();
 }
@@ -58,14 +56,13 @@ ShipBFieldMap::ShipBFieldMap(const std::string& newName, const ShipBFieldMap& rh
     dy_(0.0), yRange_(0.0),
     zMin_(0.0), zMax_(0.0), 
     dz_(0.0), zRange_(0.0),
-    xOffset_(newXOffset*rhs.LUnit_), 
-    yOffset_(newYOffset*rhs.LUnit_),
-    zOffset_(newZOffset*rhs.LUnit_),
-    LUnit_(rhs.LUnit_),
-    BUnit_(rhs.BUnit_)
+    xOffset_(newXOffset), 
+    yOffset_(newYOffset),
+    zOffset_(newZOffset),
+    BScale_(rhs.BScale_)
 {
     // Copy constructor with new label and different global offset, which uses
-    // the same distance units as the rhs object
+    // the same field map data (pointer) and distance units as the rhs object
     this->initialise();
 }
 
@@ -161,17 +158,6 @@ void ShipBFieldMap::readMapFile()
     getData >> tmpString >> xMin_ >> xMax_ >> dx_ 
 	    >> yMin_ >> yMax_ >> dy_ >> zMin_ >> zMax_ >> dz_;    
 
-    // Specify distance units
-    xMin_ *= LUnit_;
-    xMax_ *= LUnit_;
-    dx_ *= LUnit_;
-    yMin_ *= LUnit_;
-    yMax_ *= LUnit_;
-    dy_ *= LUnit_;
-    zMin_ *= LUnit_;
-    zMax_ *= LUnit_;
-    dz_ *= LUnit_;
-
     std::cout<<"x values: "<<xMin_<<", "<<xMax_<<", dx = "<<dx_<<std::endl;
 
     xRange_ = xMax_ - xMin_;
@@ -212,11 +198,11 @@ void ShipBFieldMap::readMapFile()
 	    
 	    getData >> Bx >> By >> Bz;
 
-	    // Specify B-field units
-	    Bx *= BUnit_;
-	    By *= BUnit_;
-	    Bz *= BUnit_;
-	    
+	    // Multiply these B fields in Tesla to the VMC unit (kGauss)
+	    Bx *= BScale_;
+	    By *= BScale_;
+	    Bz *= BScale_;
+
 	    // Store the B field 3-vector
 	    TVector3 BVector(Bx, By, Bz);
 	    fieldMap_->push_back(BVector);

@@ -156,10 +156,10 @@ void MagneticSpectrometer::ConstructGeometry()
     InitMedium("Concrete");
     TGeoMedium *Conc =gGeoManager->GetMedium("Concrete");
     
-    TGeoUniformMagField *magField1 = new TGeoUniformMagField(0.,-MagneticField,0.); //magnetic field arm1
-    TGeoUniformMagField *magField2 = new TGeoUniformMagField(0.,MagneticField,0.); //magnetic field arm2
-    TGeoUniformMagField *retFieldU    = new TGeoUniformMagField(0.,0.,-MagneticField); //magnetic field up return yoke
-    TGeoUniformMagField *retFieldL   = new TGeoUniformMagField(0.,0.,MagneticField); //magnetic field low return yoke
+    //TGeoUniformMagField *magField1 = new TGeoUniformMagField(0.,-MagneticField,0.); //magnetic field arm1
+    //TGeoUniformMagField *magField2 = new TGeoUniformMagField(0.,MagneticField,0.); //magnetic field arm2
+    //TGeoUniformMagField *retFieldU    = new TGeoUniformMagField(0.,0.,-MagneticField); //magnetic field up return yoke
+    //TGeoUniformMagField *retFieldL   = new TGeoUniformMagField(0.,0.,MagneticField); //magnetic field low return yoke
     
     Double_t d = 0;
     
@@ -170,7 +170,7 @@ void MagneticSpectrometer::ConstructGeometry()
     TGeoBBox *UpYokeBox = new TGeoBBox("UpYokeBox", XtrSize/2+10*cm, ReturnYokeH/2, (2*ArmWidth + MiddleGap)/2);
     TGeoVolume *volUpYoke = new TGeoVolume("volUpYoke",UpYokeBox,vacuum);
     volMSBox->AddNode(volUpYoke,1,new TGeoTranslation(0,YtrSize_tot/2 - ReturnYokeH/2,0));
-    volUpYoke->SetField(retFieldU);
+    //volUpYoke->SetField(retFieldU);
     
     
     TGeoBBox *FeYoke = new TGeoBBox("FeYoke",XtrSize/2, ReturnYokeH/2, ArmWidth/2);
@@ -215,7 +215,7 @@ void MagneticSpectrometer::ConstructGeometry()
     TGeoBBox *LowYokeBox = new TGeoBBox("LowYokeBox", XtrSize/2 +10*cm, ReturnYokeH/2, (2*ArmWidth + MiddleGap)/2);
     TGeoVolume *volLowYoke = new TGeoVolume("volLowYoke",LowYokeBox,vacuum);
     volMSBox->AddNode(volLowYoke,1,new TGeoTranslation(0,-YtrSize_tot/2 + ReturnYokeH/2,0));
-    volLowYoke->SetField(retFieldL);
+    //volLowYoke->SetField(retFieldL);
    
     //vertical coils
     for(int i = 0; i < NCoils; i++)
@@ -237,7 +237,7 @@ void MagneticSpectrometer::ConstructGeometry()
     TGeoBBox *Arm1Box = new TGeoBBox("Arm1MSBox", XtrSize/2, YtrSize_Fe/2, ArmWidth/2);
     TGeoVolume *volArm1 = new TGeoVolume("volArm1MS", Arm1Box,vacuum);
     volMSBox ->AddNode(volArm1,1,new TGeoTranslation(0,0,-(MiddleGap+ArmWidth)/2));
-    volArm1->SetField(magField1);
+    //volArm1->SetField(magField1);
 
     
     TGeoBBox *IronLayer = new TGeoBBox("Iron",XtrSize/2, YtrSize_Fe/2, IronSlabWidth/2);
@@ -260,7 +260,7 @@ void MagneticSpectrometer::ConstructGeometry()
     TGeoBBox *Arm2Box = new TGeoBBox("Arm2MSBox", XtrSize/2, YtrSize_Fe/2, ArmWidth/2);
     TGeoVolume *volArm2 = new TGeoVolume("volArm2MS", Arm2Box,vacuum);
     volMSBox ->AddNode(volArm2,1,new TGeoTranslation(0,0,(MiddleGap+ArmWidth)/2));
-    volArm2->SetField(magField2);
+    //volArm2->SetField(magField2);
     
     for(Int_t i = 0; i < NSlabs; i++)
     {

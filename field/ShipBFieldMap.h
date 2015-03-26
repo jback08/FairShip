@@ -21,25 +21,24 @@ class ShipBFieldMap : public TVirtualMagField
     //! Constructor
     /*!
       \param [in] label A descriptive name/title/label for this field
-      \param [in] mapFileName The name of the field map file
-      \param [in] xOffset The x global co-ordinate shift to position the field map
-      \param [in] yOffset The y global co-ordinate shift to position the field map
-      \param [in] zOffset The z global co-ordinate shift to position the field map
-      \param [in] LUnit The length unit
-      \param [in] BUnit The B field unit
+      \param [in] mapFileName The name of the field map file (distances in cm, fields in Tesla)
+      \param [in] xOffset The x global co-ordinate shift to position the field map (cm)
+      \param [in] yOffset The y global co-ordinate shift to position the field map (cm)
+      \param [in] zOffset The z global co-ordinate shift to position the field map (cm)
+      \param [in] BScale  The scaling factor for the magnetic field unit (Tesla to VMC unit kGauss)
     */
     ShipBFieldMap(const std::string& label, const std::string& mapFileName,
 		  Double_t xOffset = 0.0, Double_t yOffset = 0.0, Double_t zOffset = 0.0,
-		  Double_t LUnit = 1.0, Double_t BUnit = 1.0);
+		  Double_t BScale = 10.0);
 
     //! Copy constructor with a new global positioning offset. Use this if you want
     //! to reuse the same field map information elsewhere in the geometry
     /*! 
       \param [in] rhs The ShipBFieldMap object to be copied
       \param [in] newName The new description or title of the field
-      \param [in] newXOffset The new global offset x co-ordinate
-      \param [in] newYOffset The new global offset y co-ordinate
-      \param [in] newZOffset The new global offset z co-ordinate
+      \param [in] newXOffset The new global offset x co-ordinate (cm)
+      \param [in] newYOffset The new global offset y co-ordinate (cm)
+      \param [in] newZOffset The new global offset z co-ordinate (cm)
       \returns a copy of the field map object "rhs", keeping the same fieldMap pointer
     */
     ShipBFieldMap(const std::string& newName, const ShipBFieldMap& rhs,
@@ -50,26 +49,26 @@ class ShipBFieldMap : public TVirtualMagField
 
     //! Implementation of evaluating the B field
     /*!
-      \param [in] position The x,y,z global co-ordinates of the point
-      \param [out] B The x,y,z components of the magnetic field
+      \param [in] position The x,y,z global co-ordinates of the point (cm)
+      \param [out] B The x,y,z components of the magnetic field (Tesla)
     */
     virtual void Field(const Double_t* position, Double_t* B);
 
     //! Set the x global co-ordinate shift
     /*!
-      \param [in] xValue The value of the x global co-ordinate shift
+      \param [in] xValue The value of the x global co-ordinate shift (cm)
     */
     void SetXOffset(Double_t xValue) {xOffset_ = xValue;}
 
     //! Set the y global co-ordinate shift
     /*!
-      \param [in] yValue The value of the y global co-ordinate shift
+      \param [in] yValue The value of the y global co-ordinate shift (cm)
     */
     void SetYOffset(Double_t yValue) {yOffset_ = yValue;}
 
     //! Set the z global co-ordinate shift
     /*!
-      \param [in] zValue The value of the z global co-ordinate shift
+      \param [in] zValue The value of the z global co-ordinate shift (cm)
     */
     void SetZOffset(Double_t zValue) {zOffset_ = zValue;}
 
@@ -329,11 +328,8 @@ class ShipBFieldMap : public TVirtualMagField
     //! The z value of the positional offset for the map
     Double_t zOffset_;
 
-    //! The length unit
-    Double_t LUnit_;
-
-    //! The B field unit
-    Double_t BUnit_;
+    //! The scaling factor for the B field unit (e.g. Tesla to VMC unit of kGauss)
+    Double_t BScale_;
 
     //! Bin A for the trilinear interpolation
     Int_t binA_;
