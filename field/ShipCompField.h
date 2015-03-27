@@ -55,6 +55,12 @@ class ShipCompField: public TVirtualMagField
     */
     size_t nComposite() const {return theFields_.size();}
 
+    //! Get the vector of fields
+    /*!
+      \returns the vector of fields
+    */
+    std::vector<TVirtualMagField*> getCompFields() const {return theFields_;}
+
     //! ClassDef for ROOT
     ClassDef(ShipCompField,1);
 
