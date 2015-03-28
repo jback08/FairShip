@@ -71,8 +71,9 @@ yMin and zMin, and are both incremented using the same logic as before. This is 
 until the very last line of the data, which will correspond to the point (xMax, yMax, zMax).
 
 There are three field maps provided, created by Victoria Bayliss and Tom Rawlings from RAL,
-which have a positional resolution of 10 cm for x,y,z; to save on disk space, they have a 
-B-field precision down to 0.01 mT and are compressed:
+which have a positional resolution of 10 cm for x,y,z. To save on disk space, they have a 
+B-field precision down to 0.01 mT and are compressed. The script [convertMap.py](convertMap.py)
+was used to convert the RAL field maps for FairShip use.
 
 * [MuonFilterBFieldMap1.txt.gz](MuonFilterBFieldMap1.txt.gz) Using original co-ordinates for the steel
 * [MuonFilterBFieldMap2.txt.gz](MuonFilterBFieldMap2.txt.gz) Magnet C0 inner and outer gap moved from 0 to 2 cm
