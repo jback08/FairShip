@@ -15,7 +15,7 @@ this "field" sub-directory.
 The structure of the control file, such as "field/BFieldSetup.txt", uses specific 
 keywords to denote what each line represents:
 
-'''
+```
 0) Comment lines start with the # symbol
 1) "FieldMap" for using field maps to represent the magnetic field
 2) "CopyMap" for copying a previously defined field map to another location (saving memory)
@@ -24,15 +24,15 @@ keywords to denote what each line represents:
 5) "Global" for setting which (single or composite) field is the global one
 6) "Region" for setting a local field to a specific volume, including the global field
 7) "Local" for only setting a local field to a specific volume, ignoring the global field
-'''
+```
 
 The syntax for each of the above options are:
 
 1) FieldMap
 
-'''
+```
 FieldMap MapLabel MapFileName x0 y0 z0
-'''
+```
 
 where MapLabel is the descriptive name of the field, MapFileName is the name of
 the file containing the field map data, and x0,y0,z0 are the offset co-ordinates 
@@ -71,9 +71,9 @@ the point (xMax, yMax, zMax).
 
 2) CopyMap
 
-'''
+```
 CopyMap MapLabel MapToCopy x0 y0 z0
-'''
+```
 
 where MapToCopy is the name of the (previously defined) map to be copied, with the 
 new co-ordinate offset specified by the values x0,y0,z0 (cm). Note that this will
@@ -81,36 +81,36 @@ reuse the field map data already stored in memory.
 
 3) Uniform
 
-'''
+```
 Uniform Label Bx By Bz
-'''
+```
 
 where Bx, By and Bz are the components of the uniform field (in Tesla),
 valid for any x,y,z co-ordinate value.
 
 4) Composite
 
-'''
+```
 Composite CompLabel Label1 ... LabelN
-'''
+```
 
 where CompLabel is the label of the composite field, comprising of the fields
 named Label1 up to LabelN.
 
 5) Global
 
-'''
+```
 Global Label1 .. LabelN
-'''
+```
 
 where Label1 to LabelN are the labels of the field(s) that are combined
 to represent the global one for the whole geometry.
 
 6) Region
 
-'''
+```
 Region VolName FieldLabel
-'''
+```
 
 where VolName is the name of the TGeo volume and FieldLabel is the
 name of the local field that should be assigned to this volume. Note that this
@@ -119,9 +119,9 @@ configuration file.
 
 7) Local
 
-'''
+```
 Local VolName FieldLabel
-'''
+```
 
 where VolName is again the name of the TGeo volume and FieldLabel
 is the name of the local field that should be assigned to this volume. This
