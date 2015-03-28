@@ -38,24 +38,28 @@ where MapLabel is the descriptive name of the field, MapFileName is the name of
 the file containing the field map data, and x0,y0,z0 are the offset co-ordinates 
 in cm for centering the field map.
 
-The magnetic field from a field map (field/ShipBFieldMap) is found using trilinear 
+The field from a map is calculated by the field/ShipBFieldMap class using trilinear 
 interpolation based on the binned map data, which is essentially a 3d histogram.
 
 The structure of the field map data file is as follows. The first line should be:
 
-a) CLimits xMin xMax dx yMin yMax dy zMin zMax dz
+```
+CLimits xMin xMax dx yMin yMax dy zMin zMax dz
+```
 
 where xMin, xMax and dx are the minimum, maximum and bin-width values (in cm) along 
 the x axis, respectively, with similar values for the y and z axes.
 
 The second line should contain the line
 
-b) Bx(T) By(T) Bz(T)
+```
+Bx(T) By(T) Bz(T)
+```
 
 which is just a label so that the user knows the following lines contain the 
 field components.
 
-c) The rest of the lines should contain the Bx, By and Bz components of the field
+The rest of the lines should contain the Bx, By and Bz components of the field
 (in Tesla) for each "bin" in the order of increasing z, increasing y, then 
 increasing x co-ordinates. 
 
