@@ -1,0 +1,88 @@
+# Recreate the uniform fields using the new interface
+Uniform B1_xPos 1.8 0.0 0.0
+Uniform B1_xNeg -1.8 0.0 0.0
+Uniform B1_yPos 0.0 1.8 0.0
+Uniform B1_yNeg 0.0 -1.8 0.0
+Uniform B2_zNeg 0.0 0.0 -1.5
+Uniform B2_zPos 0.0 0.0 1.5
+Uniform B2_yNeg 0.0 -1.5 0.0
+Uniform B2_yPos 0.0 1.5 0.0
+Uniform B3_yPos 0.0 0.01 0.0
+Uniform B3_yNeg 0.0 -0.01 0.0
+# Assign the fields to volumes
+Local MagA B1_yPos
+Local MagRetA B1_yNeg
+Local MagConALLT B1_xPos
+Local MagConARRT B1_xNeg
+Local MagConARLB B1_xNeg
+Local MagConALRB B1_xPos
+Local MagB B1_yPos
+Local MagBRL B1_yNeg
+Local MagBRR B1_yNeg
+Local MagTopLeft7t17 B1_xPos
+Local MagTopRight7t17 B1_xNeg
+Local MagBotLeft7t17 B1_xNeg
+Local MagBotRight7t17 B1_xPos
+Local MagRetC1 B1_yNeg
+Local MagCR B1_yPos
+Local MagCL B1_yPos
+Local MagCLT B1_yPos
+Local MagCLB B1_yPos
+Local MagCRT B1_yPos
+Local MagCRB B1_yPos
+Local MagTopLeft17t24 B1_xNeg
+Local MagTopRight17t24 B1_xPos
+Local MagBotLeft17t24 B1_xPos
+Local MagBotRight17t24 B1_xNeg
+Local MagRetC4 B1_yNeg
+Local MagC4L B1_yPos
+Local MagC4LB B1_yPos
+Local MagC4LT B1_yPos
+Local MagC4R B1_yPos
+Local MagC4RB B1_yPos
+Local MagC4RT B1_yPos
+Local MagTopLeft24t28 B1_xNeg
+Local MagTopRight24t28 B1_xPos
+Local MagBotLeft24t28 B1_xPos
+Local MagBotRight24t28 B1_xNeg
+Local MagRetC6L B1_yNeg
+Local MagRetC6R B1_yNeg
+Local MagC6L B1_yPos
+Local MagC6R B1_yPos
+Local MagTopLeft30t36 B1_xNeg
+Local MagTopRight30t36 B1_xPos
+Local MagBotLeft30t36 B1_xPos
+Local MagBotRight30t36 B1_xNeg
+Local MagRetC7L B1_yNeg
+Local MagRetC7R B1_yNeg
+Local MagC7L B1_yPos
+Local MagC7R B1_yPos
+Local MagTopLeft36t42 B1_xNeg
+Local MagTopRight36t42 B1_xPos
+Local MagBotLeft36t42 B1_xPos
+Local MagBotRight36t42 B1_xNeg
+Local MagRetC8L B1_yNeg
+Local MagRetC8R B1_yNeg
+Local MagC8L B1_yPos
+Local MagC8R B1_yPos
+Local MagTopLeft42t48 B1_xNeg
+Local MagTopRight42t48 B1_xPos
+Local MagBotLeft42t48 B1_xPos
+Local MagBotRight42t48 B1_xNeg
+Local volUpYoke B2_zNeg
+Local volLowYoke B2_zPos
+Local volArm1MS B2_yNeg
+Local volArm2MS B2_yPos
+Local volLateralS1 B3_yNeg
+Local volLateralS2 B3_yNeg
+Local volLateralSurface1low B3_yNeg
+Local volLateralSurface2low B3_yNeg
+Local volLateralS1_b B3_yNeg
+Local volLateralS2_b B3_yNeg
+Local volLateralSurface1blow B3_yNeg
+Local volLateralSurface2blow B3_yNeg
+Local volLateralS1_d B3_yNeg
+Local volLateralS2_d B3_yNeg
+Local volLateralS1_c B3_yNeg
+Local volLateralS2_c B3_yNeg
+Local volTarget B3_yPos

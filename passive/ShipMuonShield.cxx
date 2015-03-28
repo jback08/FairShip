@@ -111,7 +111,6 @@ void ShipMuonShield::CreateBox(const char* boxName, TGeoMedium* medium, Double_t
 {
   TGeoVolume* magF = gGeoManager->MakeBox(boxName, medium, dX, dY,dZ);
   magF->SetLineColor(color);  
-  //magF->SetField(magField);
   top->AddNode(magF, numberOfItems, new TGeoTranslation(x_translation, y_translation, z_translation ));
 }
 
@@ -121,7 +120,6 @@ void ShipMuonShield::CreateArb8(const char* arbName, TGeoMedium* medium,Double_t
 {
   TGeoVolume* magF = gGeoManager->MakeArb8(arbName, medium, dZ, corners);
   magF->SetLineColor(color);
-  //magF->SetField(magField);
   tShield->AddNode(magF, 1, new TGeoTranslation(x_translation, y_translation, z_translation ));
 }
 
@@ -132,7 +130,6 @@ void ShipMuonShield::CreateArb8(const char* arbName, TGeoMedium* medium,Double_t
   Double_t* corner=&corners[0];
   TGeoVolume* magF = gGeoManager->MakeArb8(arbName, medium, dZ, corner);
   magF->SetLineColor(color);
-  //magF->SetField(magField);
   tShield->AddNode(magF, 1, new TGeoTranslation(x_translation, y_translation, z_translation ));
 }
 
@@ -576,12 +573,10 @@ z>12 m: in the experimental hall. I put its walls at 10 m from the beam-line.
     Double_t Z1  = zEndOfAbsorb + dZ1;
     TGeoVolume *magA = gGeoManager->MakeBox("MagA", iron, dX1, dY,dZ1);
     magA->SetLineColor(45);  // red-brown
-    //magA->SetField(magFieldIron);
     top->AddNode(magA, 1, new TGeoTranslation(0, 0, Z1 ));
  
     TGeoVolume *magRetA = gGeoManager->MakeBox("MagRetA", iron, dX1/2., dY, dZ1);
     magRetA->SetLineColor(31);  // green-brown
-    //magRetA->SetField(RetField);
     top->AddNode(magRetA, 1, new TGeoTranslation(-X2, 0, Z1 ));
     top->AddNode(magRetA, 1, new TGeoTranslation( X2, 0, Z1 ));
 
@@ -590,19 +585,15 @@ z>12 m: in the experimental hall. I put its walls at 10 m from the beam-line.
     Double_t dXH1 = 0.5*(X2+dX1/2.);
     TGeoVolume  *magConALLT = gGeoManager->MakeBox("MagConALLT", iron,dXH1, dYH1, dZ1);
     magConALLT->SetLineColor(38);  
-    //magConALLT->SetField(ConLField);
     top->AddNode(magConALLT, 1, new TGeoTranslation(dXH1,dY+dYH1,Z1));
     TGeoVolume  *magConARRT = gGeoManager->MakeBox("MagConARRT", iron,dXH1, dYH1, dZ1);
     magConARRT->SetLineColor(30);  
-    //magConARRT->SetField(ConRField);
     top->AddNode(magConARRT, 1, new TGeoTranslation(-dXH1,dY+dYH1,Z1));
     TGeoVolume  *magConARLB = gGeoManager->MakeBox("MagConARLB", iron,dXH1, dYH1, dZ1);
     magConARLB->SetLineColor(30);  
-    //magConARLB->SetField(ConRField);
     top->AddNode(magConARLB, 1, new TGeoTranslation(dXH1,-(dY+dYH1),Z1));
     TGeoVolume  *magConALRB = gGeoManager->MakeBox("MagConALRB", iron,dXH1, dYH1, dZ1);
     magConALRB->SetLineColor(38);  
-    //magConALRB->SetField(ConLField);
     top->AddNode(magConALRB, 1, new TGeoTranslation(-dXH1,-(dY+dYH1),Z1));
 // 5<z<12 m: trapezoid   
     Double_t dX2 = 0.3*m;
@@ -610,7 +601,6 @@ z>12 m: in the experimental hall. I put its walls at 10 m from the beam-line.
     Double_t Z2 = zEndOfAbsorb + 2*dZ1 + dZ2;
     TGeoVolume *magB = gGeoManager->MakeTrd1("MagB", iron, dX2, dX3, dY, dZ2);
     magB->SetLineColor(45);  // red-brown
-    //magB->SetField(magFieldIron);
     top->AddNode(magB, 1, new TGeoTranslation(0, 0, Z2 ));
 
     Double_t pDz   = 0.5*(2*dY);
@@ -626,7 +616,6 @@ z>12 m: in the experimental hall. I put its walls at 10 m from the beam-line.
     Double_t alpha2 = alpha1;
     TGeoVolume *magRetB = gGeoManager->MakeTrap("MagRetB", iron, pDz, theta, phi, h1, bl1, tl1, alpha1, h2, bl2, tl2, alpha2);
     magRetB->SetLineColor(31);  // green-brown
-    //magRetB->SetField(RetField);
     TGeoRotation rot;
     rot.RotateX(90);
     Double_t X22 = 1.6*m-0.5*(dX2+dX3)/2.;
@@ -645,7 +634,6 @@ z>12 m: in the experimental hall. I put its walls at 10 m from the beam-line.
     Double_t Z3  = zEndOfAbsorb + 2*dZ1 + 2*dZ2 + dZ3;
     TGeoVolume *magRetC1 = gGeoManager->MakeTrd1("MagRetC1", iron, dX4, dX5, dY, dZ3);
     magRetC1->SetLineColor(31);  // green-brown
-    //magRetC1->SetField(RetField);
     top->AddNode(magRetC1, 1, new TGeoTranslation(0, 0, Z3 ));
      
     TGeoTrd1 *magC1T    = new TGeoTrd1("MagC1T",2*dX4, 2*dX5, dY-0.1*mm, dZ3-0.1*mm);    
@@ -653,7 +641,6 @@ z>12 m: in the experimental hall. I put its walls at 10 m from the beam-line.
     TGeoCompositeShape *compmagC1 = new TGeoCompositeShape("compMagC1", "MagC1T-MagRetC1T");
     TGeoVolume *magC1   = new TGeoVolume("MagC1", compmagC1, iron);
     magC1->SetLineColor(45);  // red-brown
-    //magC1->SetField(magFieldIron);
     top->AddNode(magC1, 1, new TGeoTranslation(0, 0, Z3));
 // 18<z<24 m:
     Double_t dX6 =  dX5;
@@ -661,14 +648,12 @@ z>12 m: in the experimental hall. I put its walls at 10 m from the beam-line.
     Double_t Z4  = zEndOfAbsorb + 2*dZ1 + 2*dZ2 + 2*dZ3 + dZ4;
     TGeoVolume *magRetC2 = gGeoManager->MakeTrd1("MagRetC2", iron, dX6, dX7, dY, dZ4);
     magRetC2->SetLineColor(31);  // green-brown
-    //magRetC2->SetField(RetField);
     top->AddNode(magRetC2, 1, new TGeoTranslation(0, 0, Z4 ));
 
     TGeoTrd1 *magC2T    = new TGeoTrd1("MagC2T",2*dX6, 2*dX7, dY-0.1*mm, dZ4-0.1*mm);    
     TGeoTrd1 *magRetC2T = new TGeoTrd1("MagRetC2T",dX6, dX7, dY, dZ4);    
     TGeoCompositeShape *compmagC2 = new TGeoCompositeShape("compMagC2", "MagC2T-MagRetC2T");
     TGeoVolume *magC2   = new TGeoVolume("MagC2", compmagC2, iron);
-    //magC2->SetField(magFieldIron);
     magC2->SetLineColor(45);  // red-brown
     top->AddNode(magC2, 1, new TGeoTranslation(0, 0, Z4));
 // 24<z<29 m:
@@ -677,14 +662,12 @@ z>12 m: in the experimental hall. I put its walls at 10 m from the beam-line.
     Double_t Z5 = zEndOfAbsorb + 2*dZ1 + 2*dZ2 + 2*dZ3 + 2*dZ4 + dZ5;
     TGeoVolume *magRetC3 = gGeoManager->MakeTrd1("MagRetC3", iron, dX8, dX9, dY, dZ5);
     magRetC3->SetLineColor(31);  // green-brown
-    //magRetC3->SetField(RetField);
     top->AddNode(magRetC3, 1, new TGeoTranslation(0, 0, Z5 ));
 
     TGeoTrd1 *magC3T    = new TGeoTrd1("MagC3T",2*dX8, 2*dX9, dY-0.1*mm, dZ5-0.1*mm);    
     TGeoTrd1 *magRetC3T = new TGeoTrd1("MagRetC3T",dX8, dX9, dY, dZ5);
     TGeoCompositeShape *compmagC3 = new TGeoCompositeShape("compMagC3", "MagC3T-MagRetC3T");
     TGeoVolume *magC3   = new TGeoVolume("MagC3", compmagC3, iron);
-    //magC3->SetField(magFieldIron);
     magC3->SetLineColor(45);  // red-brown
     top->AddNode(magC3, 1, new TGeoTranslation(0, 0, Z5));
 // 29<z<34 m:
@@ -694,14 +677,12 @@ z>12 m: in the experimental hall. I put its walls at 10 m from the beam-line.
     Double_t Z6 = zEndOfAbsorb + 2*dZ1 + 2*dZ2 + 2*dZ3 + 2*dZ4 + 2*dZ5 + dZ6;
     TGeoVolume *magRetC4 = gGeoManager->MakeBox("MagRetC4", iron, dX10, dY, dZ6 );
     magRetC4->SetLineColor(31);  // green-brown
-    //magRetC4->SetField(RetField);
     top->AddNode(magRetC4, 1, new TGeoTranslation(0, 0, Z6 ));
 
     TGeoTrd1 *magC4T    = new TGeoTrd1("MagC4T", 2*dX10,dX12+dX11, dY, dZ6);       
     TGeoTrd1 *magC5T    = new TGeoTrd1("MagC5T",dX10, dX12,     dY+1*mm, dZ6+1*mm); 
     TGeoCompositeShape *compmagC4 = new TGeoCompositeShape("compMagC4", "MagC4T-MagC5T");
     TGeoVolume *magC4   = new TGeoVolume("MagC4", compmagC4, iron);
-    //magC4->SetField(magFieldIron);
     magC4->SetLineColor(45);  // red-brown
     top->AddNode(magC4, 1, new TGeoTranslation(0, 0, Z6));
 // Concrete around first magnets
@@ -755,7 +736,6 @@ z>12 m: in the experimental hall. I put its walls at 10 m from the beam-line.
     
     TGeoVolume *magRetA = gGeoManager->MakeBox("MagRetA", iron, dX1/2., dY, dZ1);
     magRetA->SetLineColor(31);  // green-brown
-    //magRetA->SetField(RetField);
     top->AddNode(magRetA, 1, new TGeoTranslation(-X2, 0, Z1 ));
     top->AddNode(magRetA, 1, new TGeoTranslation( X2, 0, Z1 ));
 
@@ -802,7 +782,6 @@ z>12 m: in the experimental hall. I put its walls at 10 m from the beam-line.
     Double_t Z3  = zEndOfAbsorb + 2*dZ1 + 2*dZ2 + dZ3;
     TGeoVolume *magRetC1 = gGeoManager->MakeTrd1("MagRetC1", iron, dX17, dX24, dY, dZ3);
     magRetC1->SetLineColor(31);  // green-brown
-    //magRetC1->SetField(RetField);
     top->AddNode(magRetC1, 1, new TGeoTranslation(0, 0, Z3 ));
      
     TGeoTrd1 *magC1T    = new TGeoTrd1("MagC1T",2*dX17, 2*dX24, dY-0.1*mm, dZ3-0.1*mm);    
@@ -810,7 +789,6 @@ z>12 m: in the experimental hall. I put its walls at 10 m from the beam-line.
     TGeoCompositeShape *compmagC1 = new TGeoCompositeShape("compMagC1", "MagC1T-MagRetC1T");
     TGeoVolume *magC1   = new TGeoVolume("MagC1", compmagC1, iron);
     magC1->SetLineColor(45);  // red-brown
-    //magC1->SetField(magFieldIron);
     top->AddNode(magC1, 1, new TGeoTranslation(0, 0, Z3));
 //Top/Bot return magnets for 17-24 m
     Double_t corners8[16] = {0.,dY, 0.,dY+dX17, 2*dX17,dY+dX17, 2*dX17,dY, 
@@ -840,7 +818,6 @@ z>12 m: in the experimental hall. I put its walls at 10 m from the beam-line.
     TGeoTrd1 *magC4In     = new TGeoTrd1("MagC4In",    dX24,     dX28,dY+1*mm, dZ4+1*mm); 
     TGeoCompositeShape *compmagC4 = new TGeoCompositeShape("compMagC4", "MagC4Out-MagC4In");
     TGeoVolume *magC4   = new TGeoVolume("MagC4", compmagC4, iron);
-    //magC4->SetField(magFieldIron);
     magC4->SetLineColor(45);  // red-brown
     top->AddNode(magC4, 1, new TGeoTranslation(0, 0, Z4));
 //Top/Bot return magnets for 24-28 m
@@ -879,14 +856,12 @@ z>12 m: in the experimental hall. I put its walls at 10 m from the beam-line.
     TGeoCompositeShape *compmagC5r = new TGeoCompositeShape("compMagC5r", "MagC5rOut-MagC5rIn");
     TGeoVolume *magRetC5   = new TGeoVolume("MagRetC5", compmagC5r, iron);
     magRetC5->SetLineColor(31);  // green-brown
-    //magRetC5->SetField(RetField);
     top->AddNode(magRetC5, 1, new TGeoTranslation(0, 0, Z5 ));
 
     TGeoTrd1 *magC5Out    = new TGeoTrd1("MagC5Out", dX28O,dX30O, dY,      dZ5);       
     TGeoTrd1 *magC5In     = new TGeoTrd1("MagC5In",  dX28I,dX30I, dY+1*mm, dZ5+1*mm); 
     TGeoCompositeShape *compmagC5 = new TGeoCompositeShape("compMagC5", "MagC5Out-MagC5In");
     TGeoVolume *magC5   = new TGeoVolume("MagC5", compmagC5, iron);
-    //magC5->SetField(magFieldIron);
     magC5->SetLineColor(45);  // red-brown
     top->AddNode(magC5, 1, new TGeoTranslation(0, 0, Z5));
 //Top/Bot return magnets for 28-30 m, note inner return magnet splits too :-)
@@ -894,28 +869,24 @@ z>12 m: in the experimental hall. I put its walls at 10 m from the beam-line.
                             dXr30I,dY, dXr30I,dY+W30, dX30O,dY+W30, dX30O,dY}; 
     TGeoVolume *magTopLeft28t30 = gGeoManager->MakeArb8("MagTopLeft28t30", iron, dZ5, corners16) ;
     magTopLeft28t30->SetLineColor(38);  
-    //magTopLeft28t30->SetField(ConLField);
     top->AddNode(magTopLeft28t30, 1, new TGeoTranslation(0, 0, Z5 ));
 
     Double_t corners17[16] = {-dX28O,dY, -dX28O,dY+W28, -dXr28I, dY+W28, -dXr28I,dY,
                             -dX30O,dY, -dX30O,dY+W30, -dXr30I, dY+W30, -dXr30I,dY};
     TGeoVolume *magTopRight28t30 = gGeoManager->MakeArb8("MagTopRight28t30", iron, dZ5, corners17) ;
     magTopRight28t30->SetLineColor(30); 
-    //magTopRight28t30->SetField(ConRField);
     top->AddNode(magTopRight28t30, 1, new TGeoTranslation(0, 0, Z5 ));
 //Bot return magnets 
     Double_t corners18[16] = {dXr28I,-dY-W28, dXr28I,-dY, dX28O,-dY, dX28O,-dY-W28, 
                             dXr30I,-dY-W30, dXr30I,-dY, dX30O,-dY, dX30O,-dY-W30};
     TGeoVolume *magBotLeft28t30 = gGeoManager->MakeArb8("MagBotLeft28t30", iron, dZ5, corners18) ;
     magBotLeft28t30->SetLineColor(30);  
-    //magBotLeft28t30->SetField(ConRField);
     top->AddNode(magBotLeft28t30, 1, new TGeoTranslation(0, 0, Z5 ));
 
     Double_t corners19[16] = {-dX28O,-dY-W28, -dX28O,-dY, -dXr28I,-dY, -dXr28I,-dY-W28, 
                             -dX30O,-dY-W30, -dX30O,-dY, -dXr30I,-dY, -dXr30I,-dY-W30};
     TGeoVolume *magBotRight28t30 = gGeoManager->MakeArb8("MagBotRight28t30", iron, dZ5, corners19) ;
     magBotRight28t30->SetLineColor(38); 
-    //magBotRight28t30->SetField(ConLField);
     top->AddNode(magBotRight28t30, 1, new TGeoTranslation(0, 0, Z5 ));
 
 // 30<z<36 m: Note: here also return field splits!
@@ -931,14 +902,12 @@ z>12 m: in the experimental hall. I put its walls at 10 m from the beam-line.
     TGeoCompositeShape *compmagC6r = new TGeoCompositeShape("compMagC6r", "MagC6rOut-MagC6rIn");
     TGeoVolume *magRetC6   = new TGeoVolume("MagRetC6", compmagC6r, iron);
     magRetC6->SetLineColor(31);  // green-brown
-    //magRetC6->SetField(RetField);
     top->AddNode(magRetC6, 1, new TGeoTranslation(0, 0, Z6 ));
 
     TGeoTrd1 *magC6Out    = new TGeoTrd1("MagC6Out", dX30O,dX36O, dY,      dZ6);       
     TGeoTrd1 *magC6In     = new TGeoTrd1("MagC6In",  dX30I,dX36I, dY+1*mm, dZ6+1*mm); 
     TGeoCompositeShape *compmagC6 = new TGeoCompositeShape("compMagC6", "MagC6Out-MagC6In");
     TGeoVolume *magC6   = new TGeoVolume("MagC6", compmagC6, iron);
-    //magC6->SetField(magFieldIron);
     magC6->SetLineColor(45);  // red-brown
     top->AddNode(magC6, 1, new TGeoTranslation(0, 0, Z6));
 //Top/Bot return magnets for 30-36 m, note inner return magnet splits too :-)
@@ -946,28 +915,24 @@ z>12 m: in the experimental hall. I put its walls at 10 m from the beam-line.
                             dXr36I,dY, dXr36I,dY+W36, dX36O,dY+W36, dX36O,dY}; 
     TGeoVolume *magTopLeft30t36 = gGeoManager->MakeArb8("MagTopLeft30t36", iron, dZ6, corners20) ;
     magTopLeft30t36->SetLineColor(38);  
-    //magTopLeft30t36->SetField(ConLField);
     top->AddNode(magTopLeft30t36, 1, new TGeoTranslation(0, 0, Z6 ));
 
     Double_t corners21[16] = {-dX30O,dY, -dX30O,dY+W30, -dXr30I, dY+W30, -dXr30I,dY,
                             -dX36O,dY, -dX36O,dY+W36, -dXr36I, dY+W36, -dXr36I,dY};
     TGeoVolume *magTopRight30t36 = gGeoManager->MakeArb8("MagTopRight30t36", iron, dZ6, corners21) ;
     magTopRight30t36->SetLineColor(30); 
-    //magTopRight30t36->SetField(ConRField);
     top->AddNode(magTopRight30t36, 1, new TGeoTranslation(0, 0, Z6 ));
 //Bot return magnets 
     Double_t corners22[16] = {dXr30I,-dY-W30, dXr30I,-dY, dX30O,-dY, dX30O,-dY-W30, 
                             dXr36I,-dY-W36, dXr36I,-dY, dX36O,-dY, dX36O,-dY-W36};
     TGeoVolume *magBotLeft30t36 = gGeoManager->MakeArb8("MagBotLeft30t36", iron, dZ6, corners22) ;
     magBotLeft30t36->SetLineColor(30);  
-    //magBotLeft30t36->SetField(ConRField);
     top->AddNode(magBotLeft30t36, 1, new TGeoTranslation(0, 0, Z6 ));
 
     Double_t corners23[16] = {-dX30O,-dY-W30, -dX30O,-dY, -dXr30I,-dY, -dXr30I,-dY-W30, 
                             -dX36O,-dY-W36, -dX36O,-dY, -dXr36I,-dY, -dXr36I,-dY-W36};
     TGeoVolume *magBotRight30t36 = gGeoManager->MakeArb8("MagBotRight30t36", iron, dZ6, corners23) ;
     magBotRight30t36->SetLineColor(38); 
-    //magBotRight30t36->SetField(ConLField);
     top->AddNode(magBotRight30t36, 1, new TGeoTranslation(0, 0, Z6 ));
 
 // 36<z<42 m: Note: here also return field splits!
@@ -984,14 +949,12 @@ z>12 m: in the experimental hall. I put its walls at 10 m from the beam-line.
     TGeoCompositeShape *compmagC7r = new TGeoCompositeShape("compMagC7r", "MagC7rOut-MagC7rIn");
     TGeoVolume *magRetC7   = new TGeoVolume("MagRetC7", compmagC7r, iron);
     magRetC7->SetLineColor(31);  // green-brown
-    //magRetC7->SetField(RetField);
     top->AddNode(magRetC7, 1, new TGeoTranslation(0, 0, Z7 ));
 
     TGeoTrd1 *magC7Out    = new TGeoTrd1("MagC7Out", dX36O,dX42O, dY,      dZ7);       
     TGeoTrd1 *magC7In     = new TGeoTrd1("MagC7In",  dX36I,dX42I, dY+1*mm, dZ7+1*mm); 
     TGeoCompositeShape *compmagC7 = new TGeoCompositeShape("compMagC7", "MagC7Out-MagC7In");
     TGeoVolume *magC7   = new TGeoVolume("MagC7", compmagC7, iron);
-    //magC7->SetField(magFieldIron);
     magC7->SetLineColor(45);  // red-brown
     top->AddNode(magC7, 1, new TGeoTranslation(0, 0, Z7));
 //Top/Bot return magnets for 36-42 m, note inner return magnet splits too :-)
@@ -999,7 +962,7 @@ z>12 m: in the experimental hall. I put its walls at 10 m from the beam-line.
                             dXr42I,dY, dXr42I,dY+W42, dX42O,dY+W42, dX42O,dY}; 
     TGeoVolume *magTopLeft36t42 = gGeoManager->MakeArb8("MagTopLeft36t42", iron, dZ7, corners24) ;
     magTopLeft36t42->SetLineColor(38);  
-    //magTopLeft36t42->SetField(ConLField);
+
     top->AddNode(magTopLeft36t42, 1, new TGeoTranslation(0, 0, Z7 ));
 
     Double_t corners25[16] = {-dX36O,dY, -dX36O,dY+W36, -dXr36I, dY+W36, -dXr36I,dY,

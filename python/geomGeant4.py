@@ -10,44 +10,6 @@ import hepunit as G4Unit
 import ROOT
 gTransportationManager = G4TransportationManager.GetTransportationManager()
 
-def setMagnetField(flag=None):
-    print 'setMagnetField() called'
-    fGeo = ROOT.gGeoManager  
-    vols = fGeo.GetListOfVolumes()
-    #copy field by hand to geant4
-    listOfFields={}
-    for v in vols:
-     field =  v.GetField()
-     if not field: continue
-     bx = field.GetFieldValue()[0]/u.tesla*G4Unit.tesla
-     by = field.GetFieldValue()[1]/u.tesla*G4Unit.tesla
-     bz = field.GetFieldValue()[2]/u.tesla*G4Unit.tesla
-     magFieldIron = G4UniformMagField(G4ThreeVector(bx,by,bz))
-     FieldIronMgr = G4FieldManager(magFieldIron)
-     FieldIronMgr.CreateChordFinder(magFieldIron)
-     listOfFields[v.GetName()]=FieldIronMgr  
-    gt = gTransportationManager
-    gn = gt.GetNavigatorForTracking()
-    world = gn.GetWorldVolume().GetLogicalVolume()
-    setField = {}
-    for da in range(world.GetNoDaughters()):
-        vl0  = world.GetDaughter(da)
-        vln  = vl0.GetName().__str__()
-        lvl0 = vl0.GetLogicalVolume()
-        if listOfFields.has_key(vln) :  setField[lvl0]=vln
-        for dda in range(lvl0.GetNoDaughters()): 
-         vl  = lvl0.GetDaughter(dda)
-         vln = vl.GetName().__str__()
-         lvl = vl.GetLogicalVolume()
-         if listOfFields.has_key(vln) :  setField[lvl]=vln
-    for lvl in setField:
-       lvl.SetFieldManager(listOfFields[setField[lvl]],True)  
-       if flag=='dump': 
-            constField = listOfFields[setField[lvl]].GetDetectorField().GetConstantFieldValue()
-            print 'set field for ',setField[lvl], constField
-    g4Run = G4RunManager.GetRunManager()
-    g4Run.GeometryHasBeenModified(True)
-
 def printWF(vl):
     vln  = vl.GetName().__str__()
     lvl  = vl.GetLogicalVolume()
@@ -58,10 +20,13 @@ def printWF(vl):
     fm = lvl.GetFieldManager() 
     if fm:  
        fi = fm.GetDetectorField()
-       print '   Magnetic field:',fi.GetConstantFieldValue()/G4Unit.tesla
+       # Cannot call this function since the fields are now G4Field objects
+       # via the VMC interface and not G4UniformMagField objects
+       #print '   Magnetic field:',fi.GetConstantFieldValue()/G4Unit.tesla
     magnetMass = 0
     if vln[0:3]=='Mag': magnetMass =  M # only count volumes starting with Mag
     return magnetMass 
+
 def printWeightsandFields():
    gt = gTransportationManager
    gn = gt.GetNavigatorForTracking()
@@ -76,11 +41,14 @@ def printWeightsandFields():
        magnetMass+=printWF(vl)
    print 'total magnet mass',magnetMass/1000.,'t'
    return
+
 def getRunManager():
  return G4RunManager.GetRunManager()
+
 def startUI():
  import G4interface
  G4interface.StartUISession() 
+
 def debug():
   gt = gTransportationManager
   gn = gt.GetNavigatorForTracking()

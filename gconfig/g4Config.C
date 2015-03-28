@@ -25,6 +25,8 @@ void Config()
 /// When more than one options are selected, they should be separated with '+'
 /// character: eg. stepLimit+specialCuts.
 
+   cout<<"Started gconfig/g4Config.C"<<endl;
+
    TG4RunConfiguration* runConfiguration 
            = new TG4RunConfiguration("geomRoot", "QGSP_BERT_HP_PEN", "stepLimiter+specialCuts+specialControls");
 
@@ -44,9 +46,11 @@ void Config()
    //}
   
    /// Set the fields (global and/or local to the TGeo volumes)
-   cout << "Trying to make the magnetic fields..." << endl;
+   cout << "Creating the magnetic fields" << endl;
    ShipFieldMaker* fieldMaker = new ShipFieldMaker();
-   fieldMaker->makeFields("control.txt");
+   fieldMaker->makeFields("field/BFieldSetup.txt");
+   // Use this to recreate the uniform fields set-up
+   //fieldMaker->makeFields("field/UniformBFieldSetup.txt");
 
 /// Customise Geant4 setting
 /// (verbose level, global range cut, ..)
@@ -57,5 +61,7 @@ void Config()
    //set geant4 specific stuff
    geant4->SetMaxNStep(10000);  // default is 30000
    geant4->ProcessGeantMacro(configm1.Data());
+
+   cout<<"Finished gconfig/g4Config.C"<<endl;
 
 }

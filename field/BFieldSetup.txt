@@ -1,0 +1,28 @@
+# Use the field map for the muon filter geometry
+FieldMap Map field/MuonFilterBFieldMap.txt 0.0 0.0 0.0
+Uniform B2_zNeg 0.0 0.0 -1.5
+Uniform B2_zPos 0.0 0.0 1.5
+Uniform B2_yNeg 0.0 -1.5 0.0
+Uniform B2_yPos 0.0 1.5 0.0
+Uniform B3_yPos 0.0 0.01 0.0
+Uniform B3_yNeg 0.0 -0.01 0.0
+# Global field
+Global Map
+# Assign local (+ global fringe) fields to remaining volumes
+Region volUpYoke B2_zNeg
+Region volLowYoke B2_zPos
+Region volArm1MS B2_yNeg
+Region volArm2MS B2_yPos
+Region volLateralS1 B3_yNeg
+Region volLateralS2 B3_yNeg
+Region volLateralSurface1low B3_yNeg
+Region volLateralSurface2low B3_yNeg
+Region volLateralS1_b B3_yNeg
+Region volLateralS2_b B3_yNeg
+Region volLateralSurface1blow B3_yNeg
+Region volLateralSurface2blow B3_yNeg
+Region volLateralS1_d B3_yNeg
+Region volLateralS2_d B3_yNeg
+Region volLateralS1_c B3_yNeg
+Region volLateralS2_c B3_yNeg
+Region volTarget B3_yPos

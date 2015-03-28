@@ -50,9 +50,12 @@ ShipFieldMaker::~ShipFieldMaker()
 void ShipFieldMaker::makeFields(const std::string& inputFile)
 {
 
-    std::cout<<"ShipFieldMaker::makeFields inputFile = "<<inputFile<<std::endl;
+    std::string fullFileName = getenv("VMCWORKDIR");
+    fullFileName += "/"; fullFileName += inputFile.c_str();
 
-    std::ifstream getData(inputFile.c_str());
+    std::cout<<"ShipFieldMaker::makeFields inputFile = "<<fullFileName<<std::endl;
+
+    std::ifstream getData(fullFileName);
     std::string whiteSpace(" ");
 
     // Loop while the input file is readable
@@ -198,13 +201,18 @@ void ShipFieldMaker::createFieldMap(const stringVect& inputLine)
 	if (!this->gotField(label)) {
 
 	    std::string mapFileName = inputLine[2];
+
+	    // Add the VMCWORKDIR prefix to this map name
+	    std::string fullFileName = getenv("VMCWORKDIR");
+	    fullFileName += "/"; fullFileName += mapFileName.c_str();
+
 	    Double_t x0 = std::atof(inputLine[3].c_str());
 	    Double_t y0 = std::atof(inputLine[4].c_str());
 	    Double_t z0 = std::atof(inputLine[5].c_str());
 	    
-	    std::cout<<"Creating map field for "<<label.Data()<<std::endl;
+	    std::cout<<"Creating map field "<<label.Data()<<" using "<<fullFileName<<std::endl;
 	    
-	    ShipBFieldMap* mapField = new ShipBFieldMap(label.Data(), mapFileName,
+	    ShipBFieldMap* mapField = new ShipBFieldMap(label.Data(), fullFileName,
 							x0, y0, z0, T_);
 	    theFields_[label] = mapField;
 
@@ -251,7 +259,9 @@ void ShipFieldMaker::copyFieldMap(const stringVect& inputLine)
 
 	    if (mapToCopy) {
 		
-		std::cout<<"Creating map field copy for "<<label.Data()<<std::endl;
+		std::cout<<"Creating map field copy "<<label.Data()
+			 <<" based on "<<mapToCopy.Data()<<std::endl;
+
 		ShipBFieldMap* copiedMap = new ShipBFieldMap(label.Data(), *fieldToCopy,
 							     x0, y0, z0);
 		theFields_[label] = copiedMap;		    
@@ -318,7 +328,6 @@ void ShipFieldMaker::createComposite(const stringVect& inputLine)
 
     }
 
-
 }
 
 void ShipFieldMaker::setGlobalField(const stringVect& inputLine)
@@ -351,7 +360,12 @@ void ShipFieldMaker::setGlobalField(const stringVect& inputLine)
 
 	globalField_ = new ShipCompField(label.Data(), vectFields);
 	// Set this as the global field in the virtual MC
-	if (gMC) {gMC->SetMagField(globalField_);}
+	if (gMC) {
+	    std::cout<<"Settting "<<label.Data()<<" field as the global field for gMC"<<std::endl;
+	    gMC->SetMagField(globalField_);
+	} else {
+	    std::cout<<"Error. The global virtual MC pointer gMC is null! The global field can't be used!"<<std::endl;
+	}
 
     } else {
 
@@ -400,7 +414,8 @@ void ShipFieldMaker::setRegionField(const stringVect& inputLine)
 			// Create the combined local + global field and store in the internal map.
 			// Other volumes that use the same combined field will use the stored pointer
 			std::cout<<"Creating the combined field "<<lgName.Data()<<", with local field "
-				 <<fieldName.Data()<<" with the global field for volume"<<volName.Data()<<std::endl;
+				 <<fieldName.Data()<<" with the global field for volume "
+				 <<volName.Data()<<std::endl;
 
 			ShipCompField* combField = new ShipCompField(lgName.Data(), localField, globalField_);
 			theFields_[lgName] = combField;
@@ -502,7 +517,8 @@ TVirtualMagField* ShipFieldMaker::getVolumeField(const TString& volName) const
     TGeoVolume* theVol(0);
     if (gGeoManager) {theVol = gGeoManager->FindVolumeFast(volName.Data());}
 
-    if (theVol) {	    
+    if (theVol) {
+	// Need to cast the TObject* to a TVirtualMagField*
 	theField = dynamic_cast<TVirtualMagField*>(theVol->GetField());
     }
 

@@ -86,8 +86,7 @@ void ShipBFieldMap::Field(const Double_t* position, Double_t* B)
 
     // First check to see if we are inside the field map range
     Bool_t inside = this->insideRange(x, y, z);
-    std::cout<<"x,y,z = "<<x<<", "<<y<<", "
-	     <<z<<", Inside = "<<(int) inside<<std::endl;
+    //std::cout<<"x,y,z = "<<x<<", "<<y<<", "<<z<<", Inside = "<<(int) inside<<std::endl;
     if (inside == kFALSE) {return;}
 
     // Find the neighbouring bins for the given point
@@ -132,7 +131,7 @@ void ShipBFieldMap::Field(const Double_t* position, Double_t* B)
     B[2] = this->BInterCalc(ShipBFieldMap::zAxis);
 
     //std::cout<<GetName()<<": Bins = "<<iX<<", "<<iY<<", "<<iZ
-    //     <<", B = "<<B[0]<<", "<<B[1]<<", "<<B[2]<<std::endl;
+    //<<", B = "<<B[0]<<", "<<B[1]<<", "<<B[2]<<std::endl;
 
 }
 
@@ -150,6 +149,9 @@ void ShipBFieldMap::initialise()
 
 void ShipBFieldMap::readMapFile()
 {
+
+    std::cout<<"ShipBFieldMap::readMapFile() creating field "<<this->GetName()
+	     <<" using file "<<mapFileName_<<std::endl;
 
     std::ifstream getData(mapFileName_.c_str());
 

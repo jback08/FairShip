@@ -58,12 +58,13 @@ void ShipCompField::Field(const Double_t* position, Double_t* B)
 	    Double_t BVect[3] = {0.0, 0.0, 0.0};
 	    theField->Field(position, BVect);
 	    
-	    // Superposition of the B field components
+	    // Simple linear superposition of the B field components
 	    B[0] += BVect[0];
 	    B[1] += BVect[1];
 	    B[2] += BVect[2];
 
-	    //std::cout<<"B = "<<B[0]<<", "<<B[1]<<", "<<B[2]<<std::endl;
+	    //std::cout<<"B = "<<BVect[0]<<", "<<BVect[1]<<", "<<BVect[2]<<std::endl;
+	    //std::cout<<"BSum = "<<B[0]<<", "<<B[1]<<", "<<B[2]<<std::endl;
 
 	}
 
