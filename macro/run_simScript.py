@@ -111,6 +111,10 @@ os.system("rm %s/*.%s.root" % (outputDir, tag))
 # Parameter file name
 parFile="%s/ship.params.%s.root" % (outputDir, tag)
 
+# Uncompress any field map files
+print 'Uncompressing any map files'
+os.system("gunzip $FAIRSHIP/field/*.txt.gz")
+
 # In general, the following parts need not be touched
 # ========================================================================
 

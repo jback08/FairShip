@@ -1,5 +1,5 @@
 # Use the field map for the muon filter geometry
-FieldMap Map field/MuonFilterBFieldMap.txt 0.0 0.0 0.0
+FieldMap Map field/MuonFilterBFieldMap1.txt 0.0 0.0 0.0
 Uniform B2_zNeg 0.0 0.0 -1.5
 Uniform B2_zPos 0.0 0.0 1.5
 Uniform B2_yNeg 0.0 -1.5 0.0
