@@ -1,4 +1,3 @@
-README for the field sub-directory
 
 Magnetic fields for the FairShip simulation use the Geant4 VMC ("geant4_vmc") interface.
 The "field/ShipFieldMaker" class is used to create fields, setting them to be either
@@ -140,3 +139,10 @@ for B field tracking (stepper/chord finders..), such as those mentioned here
 https://root.cern.ch/drupal/content/magnetic-field
 
 should be added to the (end of) the g4config.in file.
+
+
+Other magnetic field classes can use the above interface provided they inherit 
+from TVirtualMagField, implement the TVirtualMagField::Field() virtual function, 
+and have unique keyword-formatted lines assigned to them in the configuration file 
+that is then understood by the ShipFieldMaker::makeFields() function, which will 
+then create the fields and assign them to volumes in the geometry.
