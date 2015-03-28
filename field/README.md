@@ -70,6 +70,13 @@ has been reached, x is incremented by dx, while the y and z values are reset to
 yMin and zMin, and are both incremented using the same logic as before. This is repeated 
 until the very last line of the data, which will correspond to the point (xMax, yMax, zMax).
 
+There are three field maps provided, created by Victoria Bayliss and Tom Rawlings from RAL,
+which have a positional resolution of 10 cm for x,y,z; to save on disk space, they have a 
+B-field precision down to 0.01 mT and are compressed:
+
+* [MuonFilterBFieldMap1.txt.gz](MuonFilterBFieldMap1.txt.gz) Using original co-ordinates for the steel
+* [MuonFilterBFieldMap2.txt.gz](MuonFilterBFieldMap2.txt.gz) Magnet C0 inner and outer gap moved from 0 to 2 cm
+* [MuonFilterBFieldMap3.txt.gz](MuonFilterBFieldMap3.txt.gz) Simplified overall magnet shape for manufacturing considerations with the 2 cm gap for magnet C0
 
 2) CopyMap
 
