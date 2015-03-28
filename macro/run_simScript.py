@@ -237,7 +237,6 @@ if eventDisplay:
 # manipulate G4 geometry to enable magnetic field in active shielding, VMC can't do it.
 if ship_geo.muShieldDesign != 1:
  import geomGeant4
- geomGeant4.setMagnetField() # ('dump') for printout of mag fields
  geomGeant4.printWeightsandFields()
 if inactivateMuonProcesses : 
  mygMC = ROOT.TGeant4.GetMC()
