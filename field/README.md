@@ -118,7 +118,8 @@ Region VolName FieldLabel
 where VolName is the name of the TGeo volume and FieldLabel is the
 name of the local field that should be assigned to this volume. Note that this
 will include the global field if it has been defined earlier in the 
-configuration file.
+configuration file, i.e. any particle inside this volume will experience
+the superposition of the local field with the global one.
 
 7) Local
 
