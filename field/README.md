@@ -1,17 +1,17 @@
 
 Magnetic fields for the FairShip simulation use the Geant4 VMC ("geant4_vmc") interface.
-The "field/ShipFieldMaker" class is used to create fields, setting them to be either
+The [ShipFieldMaker](ShipFieldMaker.h) class is used to create fields, setting them to be either
 global and/or local fields to specific volumes in the geometry. The VMC uses cm for 
 distances and kGauss (0.1 Tesla) for magnetic fields. Here, we use the same cm unit for 
 lengths, but use Tesla for magnetic fields, which the ShipFieldMaker class converts to 
 kGauss units when passed to the VMC.
 
-The script "gconfig/g4Config.C" creates a ShipFieldMaker pointer, whose makeFields 
+The script [g4Config.C](../gconfig/g4Config.C) creates a ShipFieldMaker pointer, whose makeFields 
 function takes a control file that specifies what magnetic fields are required for 
 the simulation. This control file, and any field maps that it uses, must be located in 
-this "field" sub-directory.
+this field sub-directory.
 
-The structure of the control file, such as "field/BFieldSetup.txt", uses specific 
+The structure of the control file, such as [BFieldSetup.txt](BFieldSetup.txt), uses specific 
 keywords to denote what each line represents:
 
 ```
@@ -37,7 +37,7 @@ where MapLabel is the descriptive name of the field, MapFileName is the name of
 the file containing the field map data, and x0,y0,z0 are the offset co-ordinates 
 in cm for centering the field map.
 
-The field from a map is calculated by the field/ShipBFieldMap class using trilinear 
+The field from a map is calculated by the [ShipBFieldMap](ShipBFieldMap.h) class using trilinear 
 interpolation based on the binned map data, which is essentially a 3d histogram.
 
 The structure of the field map data file is as follows. The first line should be:
@@ -64,12 +64,11 @@ increasing x co-ordinates.
 
 The first data line corresponds to the point (xMin, yMin, zMin). The next set of 
 lines correspond to the points (xMin, yMin, dz*zBin + zMin). 
-After we reach z = zMax, y is incremented from yMin to yMin + dy, z is reset to zMin, 
-and the rest of the lines follow by incrementing z up to zMax as before. 
-When y = yMax has been reached, x is incremented by dx, while the y and z values are 
-reset to yMin and zMin, and are both incremented using the same logic as before. 
-This is repeated until the very last line of the data, which will correspond to 
-the point (xMax, yMax, zMax).
+After we reach z = zMax, z is reset to zMin, y is incremented using y = dy*yBin + yMin,
+and the rest of the lines follow by incrementing z up to zMax as before. When y = yMax 
+has been reached, x is incremented by dx, while the y and z values are reset to 
+yMin and zMin, and are both incremented using the same logic as before. This is repeated 
+until the very last line of the data, which will correspond to the point (xMax, yMax, zMax).
 
 
 2) CopyMap
@@ -134,8 +133,8 @@ only see the local one.
 
 
 Magnetic fields for local volumes are pre-enabled for the VMC with the setting 
-"/mcDet/setIsLocalMagField true" in the "gconfig/g4config.in" file. Extra options 
-for B field tracking (stepper/chord finders..), such as those mentioned here
+"/mcDet/setIsLocalMagField true" in the [g4config.in](../gconfig/g4config.in) file. 
+Extra options for B field tracking (stepper/chord finders..), such as those mentioned here
 
 https://root.cern.ch/drupal/content/magnetic-field
 
@@ -143,7 +142,8 @@ should be added to the (end of) the g4config.in file.
 
 
 Other magnetic field classes can use the above interface provided they inherit 
-from TVirtualMagField, implement the TVirtualMagField::Field() virtual function, 
-and have unique keyword-formatted lines assigned to them in the configuration file 
+from [TVirtualMagField](https://root.cern.ch/root/htmldoc/TVirtualMagField.html), 
+implement the TVirtualMagField::Field() virtual function, and have unique 
+keyword-formatted lines assigned to them in the configuration file 
 that is then understood by the ShipFieldMaker::makeFields() function, which will 
 then create the fields and assign them to volumes in the geometry.
