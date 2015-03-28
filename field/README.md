@@ -63,8 +63,8 @@ The rest of the lines should contain the Bx, By and Bz components of the field
 increasing x co-ordinates. 
 
 The first data line corresponds to the point (xMin, yMin, zMin). The next set of 
-lines correspond to the points (xMin, yMin, dz*zBin + zMin). 
-After we reach z = zMax, z is reset to zMin, y is incremented using y = dy*yBin + yMin,
+lines correspond to the points (xMin, yMin, dz * zBin + zMin). 
+After we reach z = zMax, z is reset to zMin, y is incremented using y = dy * yBin + yMin,
 and the rest of the lines follow by incrementing z up to zMax as before. When y = yMax 
 has been reached, x is incremented by dx, while the y and z values are reset to 
 yMin and zMin, and are both incremented using the same logic as before. This is repeated 
