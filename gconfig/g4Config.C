@@ -52,6 +52,17 @@ void Config()
    // Use this to recreate the uniform fields set-up
    //fieldMaker->makeFields("field/UniformBFieldSetup.txt");
 
+   // Create z-x and y-z plots of the magnetic field
+   Double_t xMin(-300.0), xMax(300.0), dx(1.0);
+   Double_t yMin(-300.0), yMax(300.0), dy(1.0);
+   Double_t zMin(-9000.0), zMax(9000.0), dz(1.0);
+   //Double_t zMin(-9000.0), zMax(-3000.0), dz(1.0);
+   TVector3 xAxis(xMin, xMax, dx);
+   TVector3 yAxis(yMin, yMax, dy);
+   TVector3 zAxis(zMin, zMax, dz);
+   fieldMaker->plotZXField(zAxis, xAxis, "BField_zx.png");
+   //fieldMaker->plotZYField(zAxis, yAxis, "BField_zy.png");
+
 /// Customise Geant4 setting
 /// (verbose level, global range cut, ..)
 

@@ -238,7 +238,6 @@ if eventDisplay:
   trajFilter.SetEnergyCut(0., 400.*u.GeV)
   trajFilter.SetStorePrimaries(ROOT.kTRUE)
   trajFilter.SetStoreSecondaries(ROOT.kTRUE)
-# manipulate G4 geometry to enable magnetic field in active shielding, VMC can't do it.
 if ship_geo.muShieldDesign != 1:
  import geomGeant4
  geomGeant4.printWeightsandFields()

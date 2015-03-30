@@ -10,6 +10,7 @@
 
 #include "TString.h"
 #include "TVirtualMagField.h"
+#include "TVector3.h"
 
 #include <map>
 #include <string>
@@ -113,6 +114,40 @@ class ShipFieldMaker
       \returns the pointer to the magnetic field object
     */
     TVirtualMagField* getField(const TString& label) const;
+
+    //! Plot the magnetic field in x-y plane
+    /*!
+      \param [in] xAxis Three vector specifying the min, max and bin width of the x axis
+      \param [in] yAxis Three vector specifying the min, max and bin width of the y axis
+      \param [in] plotFile The name of the output file containing the plot of the magnetic field
+    */
+    void plotXYField(const TVector3& xAxis, const TVector3& yAxis, const std::string& plotFile) const;
+
+    //! Plot the magnetic field in z-x plane
+    /*!
+      \param [in] zAxis Three vector specifying the min, max and bin width of the z axis
+      \param [in] xAxis Three vector specifying the min, max and bin width of the x axis
+      \param [in] plotFile The name of the output file containing the plot of the magnetic field
+    */
+    void plotZXField(const TVector3& zAxis, const TVector3& xAxis, const std::string& plotFile) const;
+
+    //! Plot the magnetic field in z-y plane
+    /*!
+      \param [in] zAxis Three vector specifying the min, max and bin width of the z axis
+      \param [in] yAxis Three vector specifying the min, max and bin width of the y axis
+      \param [in] plotFile The name of the output file containing the plot of the magnetic field
+    */
+    void plotZYField(const TVector3& zAxis, const TVector3& yAxis, const std::string& plotFile) const;
+
+    //! Plot the magnetic field in "x-y" plane
+    /*!
+      \param [in] type The co-ordinate type: 0 = x-y, 1 = z-x and 2 = z-y
+      \param [in] xAxis Three vector specifying the min, max and bin width of the x axis
+      \param [in] yAxis Three vector specifying the min, max and bin width of the y axis
+      \param [in] plotFile The name of the output file containing the plot of the magnetic field
+    */
+    void plotField(Int_t type, const TVector3& xAxis, const TVector3& yAxis, 
+		   const std::string& plotFile) const;
 
     //! ClassDef for ROOT
     ClassDef(ShipFieldMaker,1);

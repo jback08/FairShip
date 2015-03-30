@@ -14,9 +14,17 @@
 #include "ShipBFieldMap.h"
 
 #include "TGeoManager.h"
+#include "TGeoChecker.h"
+#include "TGeoPhysicalNode.h"
 #include "TGeoUniformMagField.h"
+#include "TGeoNode.h"
 #include "TGeoVolume.h"
 #include "TVirtualMC.h"
+#include "TObjArray.h"
+#include "TH2.h"
+#include "TCanvas.h"
+#include "TStyle.h"
+#include "TROOT.h"
 
 #include <fstream>
 #include <iostream>
@@ -571,6 +579,146 @@ TVirtualMagField* ShipFieldMaker::getField(const TString& label) const
     }
 
     return theField;
+
+}
+
+void ShipFieldMaker::plotXYField(const TVector3& xAxis, const TVector3& yAxis,
+				 const std::string& plotFile) const
+{    
+    this->plotField(0, xAxis, yAxis, plotFile);
+}
+
+void ShipFieldMaker::plotZXField(const TVector3& zAxis, const TVector3& xAxis,
+				 const std::string& plotFile) const
+{    
+    this->plotField(1, zAxis, xAxis, plotFile);
+}
+
+void ShipFieldMaker::plotZYField(const TVector3& zAxis, const TVector3& yAxis,
+				 const std::string& plotFile) const
+{    
+    this->plotField(2, zAxis, yAxis, plotFile);
+}
+
+void ShipFieldMaker::plotField(Int_t type, const TVector3& xAxis, const TVector3& yAxis,
+			       const std::string& plotFile) const
+{
+
+    std::cout<<"ShipFieldMaker plotField "<<plotFile<<std::endl;
+
+    Double_t xMin = xAxis(0);
+    Double_t xMax = xAxis(1);
+    Double_t dx   = xAxis(2);
+    Int_t Nx(0);
+    if (dx > 0.0) {Nx = static_cast<Int_t>(((xMax - xMin)/dx) + 1);}
+    
+    Double_t yMin = yAxis(0);
+    Double_t yMax = yAxis(1);
+    Double_t dy   = yAxis(2);
+    Int_t Ny(0);
+    if (dy > 0.0) {Ny = static_cast<Int_t>(((yMax - yMin)/dy) + 1);}
+    
+    // Create a 2d histogram
+    TH2D theHist("theHist", "", Nx, xMin, xMax, Ny, yMin, yMax);
+    theHist.SetDirectory(0);
+    if (type == 0) {
+	// x-y
+	theHist.SetXTitle("x (cm)"); 
+	theHist.SetYTitle("y (cm)");
+    } else if (type == 1) {
+	// z-x
+	theHist.SetXTitle("z (cm)"); 
+	theHist.SetYTitle("x (cm)");
+    } else if (type == 2) {
+	// z-y
+	theHist.SetXTitle("z (cm)"); 
+	theHist.SetYTitle("y (cm)");
+    }
+
+    // Get list of volumes (to check for local fields)
+    TObjArray* theVolumes = gGeoManager->GetListOfVolumes();
+    Int_t nVol(0);
+    if (theVolumes) {nVol = theVolumes->GetSize();}
+
+    // Loop over "x" axis
+    for (Int_t ix = 0; ix < Nx; ix++) {
+
+	Double_t x = dx*ix + xMin;
+
+	// Loop over "y" axis
+	for (Int_t iy = 0; iy < Ny; iy++) {
+
+	    Double_t y = dy*iy + yMin;
+
+	    // Initialise the B field array to zero
+	    Double_t B[3] = {0.0, 0.0, 0.0};
+
+	    // Initialise the position array to zero
+	    Double_t position[3] = {0.0, 0.0, 0.0};
+	    if (type == 0) {
+		// x-y
+		position[0] = x, position[1] = y;
+	    } else if (type == 1) {
+		// z-x
+		position[0] = y, position[2] = x;
+	    } else if (type == 2) {
+		// z-y
+		position[1] = y; position[2] = x;
+	    }
+
+	    // Loop over the volumes; use local field if point is inside one of them
+	    Bool_t inside(kFALSE);
+
+	    // Find the geoemtry node (volume path)
+	    TGeoNode* theNode = gGeoManager->FindNode(position[0], position[1], position[2]);
+	    
+	    if (theNode) {
+		
+		TGeoVolume* theVol = theNode->GetVolume();
+
+		if (theVol) {
+
+		    TVirtualMagField* theField = dynamic_cast<TVirtualMagField*>(theVol->GetField());
+
+		    if (theField) {
+
+			// Find the "local" field inside the volume (using global co-ords)
+			theField->Field(position, B);
+			inside = kTRUE;
+
+		    } // theField
+
+		} // volume
+
+	    }
+
+	    // If no local volumes found, use global field if it exists
+	    if (inside == kFALSE && globalField_) {
+		globalField_->Field(position, B);
+	    }
+		    
+	    // Divide by the T_ factor, since we want to plot T not kGauss
+	    Double_t BMag = sqrt(B[0]*B[0] + B[1]*B[1] + B[2]*B[2])/T_;
+	    theHist.Fill(x, y, BMag);
+
+	} // "y" axis
+
+    } // "x" axis
+
+    Bool_t wasBatch = gROOT->IsBatch();
+    // Disable pop-up windows
+    gROOT->SetBatch(kTRUE);
+    TCanvas theCanvas("theCanvas", "", 900, 700);
+    gROOT->SetStyle("Plain");
+    gStyle->SetOptStat(0);
+    theCanvas.UseCurrentStyle();
+
+    theCanvas.cd();
+    theHist.Draw("colz");
+    theCanvas.Print(plotFile.c_str());
+
+    // Reset the batch boolean
+    if (wasBatch == kFALSE) {gROOT->SetBatch(kFALSE);}
 
 }
 

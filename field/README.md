@@ -7,9 +7,9 @@ lengths, but use Tesla for magnetic fields, which the ShipFieldMaker class conve
 kGauss units when passed to the VMC.
 
 The script [g4Config.C](../gconfig/g4Config.C) creates a ShipFieldMaker pointer, whose makeFields 
-function takes a control file that specifies what magnetic fields are required for 
-the simulation. This control file, and any field maps that it uses, must be located in 
-this field sub-directory.
+function takes a control file that specifies what magnetic fields are required for the simulation. 
+The location of the control file, and any field maps that it uses, must be specified relative 
+to the VMCWORKDIR directory.
 
 The structure of the control file, such as [BFieldSetup.txt](BFieldSetup.txt), uses specific 
 keywords to denote what each line represents:
@@ -33,9 +33,9 @@ The syntax for each of the above options are:
 FieldMap MapLabel MapFileName x0 y0 z0
 ```
 
-where MapLabel is the descriptive name of the field, MapFileName is the name of
-the file containing the field map data, and x0,y0,z0 are the offset co-ordinates 
-in cm for centering the field map.
+where MapLabel is the descriptive name of the field, MapFileName is the location of
+the file containing the field map data (relative to the VMCWORKDIR directory), and 
+x0,y0,z0 are the offset co-ordinates in cm for centering the field map.
 
 The field from a map is calculated by the [ShipBFieldMap](ShipBFieldMap.h) class using trilinear 
 interpolation based on the binned map data, which is essentially a 3d histogram.
@@ -78,6 +78,10 @@ was used to convert the RAL field maps for FairShip use.
 * [MuonFilterBFieldMap1.txt.gz](MuonFilterBFieldMap1.txt.gz) Using original co-ordinates for the steel
 * [MuonFilterBFieldMap2.txt.gz](MuonFilterBFieldMap2.txt.gz) Magnet C0 inner and outer gap moved from 0 to 2 cm
 * [MuonFilterBFieldMap3.txt.gz](MuonFilterBFieldMap3.txt.gz) Simplified overall magnet shape for manufacturing considerations with the 2 cm gap for magnet C0
+
+Only one of these field maps should be used as the global field map in [BFieldSetup.txt](BFieldSetup.txt). 
+They need to be uncompressed before the simulation can be run; the [macro/run_simScript.py]
+(../macro/run_simScript.py) run file currently does this automatically.
 
 2) CopyMap
 
