@@ -8,8 +8,9 @@ kGauss units when passed to the VMC.
 
 The script [g4Config.C](../gconfig/g4Config.C) creates a ShipFieldMaker pointer, whose makeFields 
 function takes a control file that specifies what magnetic fields are required for the simulation. 
-The location of the control file, and any field maps that it uses, must be specified relative 
-to the VMCWORKDIR directory.
+This script can also generate plots of the magnitude of the magnetic field in the z-x, z-y and/or x-y
+plane using the plotField functions in [ShipFieldMaker](ShipFieldMaker.h). The location of the control 
+file, and any field maps that it uses, must be specified relative to the VMCWORKDIR directory.
 
 The structure of the control file, such as [BFieldSetup.txt](BFieldSetup.txt), uses specific 
 keywords to denote what each line represents:
