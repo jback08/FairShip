@@ -666,7 +666,7 @@ void ShipFieldMaker::plotField(Int_t type, const TVector3& xAxis, const TVector3
 		position[1] = y; position[2] = x;
 	    }
 
-	    // Loop over the volumes; use local field if point is inside one of them
+	    // Find out if the point is inside one of the geometry volumes
 	    Bool_t inside(kFALSE);
 
 	    // Find the geoemtry node (volume path)
@@ -674,10 +674,12 @@ void ShipFieldMaker::plotField(Int_t type, const TVector3& xAxis, const TVector3
 	    
 	    if (theNode) {
 		
+		// Get the volume
 		TGeoVolume* theVol = theNode->GetVolume();
 
 		if (theVol) {
 
+		    // Get the magnetic field
 		    TVirtualMagField* theField = dynamic_cast<TVirtualMagField*>(theVol->GetField());
 
 		    if (theField) {
@@ -690,14 +692,14 @@ void ShipFieldMaker::plotField(Int_t type, const TVector3& xAxis, const TVector3
 
 		} // volume
 
-	    }
+	    } // node
 
 	    // If no local volumes found, use global field if it exists
 	    if (inside == kFALSE && globalField_) {
 		globalField_->Field(position, B);
 	    }
 		    
-	    // Divide by the T_ factor, since we want to plot T not kGauss
+	    // Divide by the T_ factor, since we want to plot Tesla not kilo Gauss
 	    Double_t BMag = sqrt(B[0]*B[0] + B[1]*B[1] + B[2]*B[2])/T_;
 	    theHist.Fill(x, y, BMag);
 
