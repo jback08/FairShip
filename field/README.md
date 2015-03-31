@@ -21,7 +21,7 @@ keywords to denote what each line represents:
 2) "CopyMap" for copying a previously defined field map to another location (saving memory)
 3) "Uniform" for creating a uniform magnetic field (no co-ordinate limits)
 4) "Constant" for creating a uniform magnetic field with co-ordinate boundary limits
-5) "Bell" for creating the [Bell](ShipBellField.h) shaped magnetic field distribution
+5) "Bell" for creating the Bell shaped magnetic field distribution
 6) "Composite" for combining two or more field types/sources
 7) "Global" for setting which (single or composite) field is the global one
 8) "Region" for setting a local field to a specific volume, including the global field
@@ -115,7 +115,7 @@ where xMin, xMax are the co-ordinate limits along the x axis (in cm),
 similarly for the y and z axes, and Bx, By and Bz are the components
 of the uniform field in Tesla.
 
-5) Bell
+5) [Bell](ShipBellField.h)
 
 ```
 Bell Label BPeak zMiddle orientInt tubeRad
