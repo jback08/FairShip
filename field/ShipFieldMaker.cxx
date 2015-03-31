@@ -12,6 +12,8 @@
 
 #include "ShipFieldMaker.h"
 #include "ShipBFieldMap.h"
+#include "ShipConstField.h"
+#include "ShipBellField.h"
 
 #include "TGeoManager.h"
 #include "TGeoChecker.h"
@@ -112,6 +114,16 @@ void ShipFieldMaker::makeFields(const std::string& inputFile)
 		    // Create the uniform magnetic field
 		    this->createUniform(lineVect);
 
+		} else if (keyWord.Contains("constant")) {
+
+		    // Create a uniform field with an x,y,z boundary
+		    this->createConstant(lineVect);
+
+		} else if (keyWord.Contains("bell")) {
+
+		    // Create the Bell-shaped field
+		    this->createBell(lineVect);
+
 		} else if (keyWord.Contains("fieldmap")) {
 
 		    // Create the field map
@@ -192,6 +204,99 @@ void ShipFieldMaker::createUniform(const stringVect& inputLine)
 
 
 }
+
+void ShipFieldMaker::createConstant(const stringVect& inputLine)
+{
+
+    size_t nWords = inputLine.size();
+
+    // Expecting a line such as:
+    // Constant LabelName xMin xMax yMin yMax zMin zMax Bx By Bz
+
+    if (nWords == 11) {
+
+	TString label(inputLine[1].c_str());
+
+	// Check if the field is already in the map
+	if (!this->gotField(label)) {
+
+	    Double_t xMin = std::atof(inputLine[2].c_str());
+	    Double_t xMax = std::atof(inputLine[3].c_str());
+
+	    Double_t yMin = std::atof(inputLine[4].c_str());
+	    Double_t yMax = std::atof(inputLine[5].c_str());
+
+	    Double_t zMin = std::atof(inputLine[6].c_str());
+	    Double_t zMax = std::atof(inputLine[7].c_str());
+
+	    // Input field in Tesla, interface needs kGauss units
+	    Double_t Bx = std::atof(inputLine[8].c_str())*T_;
+	    Double_t By = std::atof(inputLine[9].c_str())*T_;
+	    Double_t Bz = std::atof(inputLine[10].c_str())*T_;
+
+	    std::cout<<"Creating constant field for "<<label.Data()<<std::endl;
+
+	    ShipConstField* theField = new ShipConstField(label.Data(), xMin, xMax, yMin, yMax,
+							  zMin, zMax, Bx, By, Bz);
+	    theFields_[label] = theField;
+
+	} else {
+	    std::cout<<"We already have a field with the name "
+		     <<label.Data()<<std::endl;
+	}
+
+    } else {
+
+	std::cout<<"Expecting 11 words for the definition of the constant field: "
+		 <<"Constant Label xMin xMax yMin yMax zMin zMax Bx By Bz"<<std::endl;
+
+    }
+
+
+}
+
+void ShipFieldMaker::createBell(const stringVect& inputLine)
+{
+
+    size_t nWords = inputLine.size();
+
+    // Expecting a line such as:
+    // Bell LabelName BPeak zMiddle orientationInt tubeRadius
+
+    if (nWords == 6) {
+
+	TString label(inputLine[1].c_str());
+
+	// Check if the field is already in the map
+	if (!this->gotField(label)) {
+
+	    // Input field in Tesla, interface needs kGauss units
+	    Double_t BPeak = std::atof(inputLine[2].c_str())*T_;
+	    Double_t zMiddle = std::atof(inputLine[3].c_str());
+
+	    Int_t orient = std::atoi(inputLine[4].c_str());
+	    Double_t tubeR = std::atof(inputLine[5].c_str());
+
+	    std::cout<<"Creating Bell field for "<<label.Data()<<std::endl;
+
+	    ShipBellField* theField = new ShipBellField(label.Data(), BPeak, zMiddle, orient, tubeR);
+	    theFields_[label] = theField;
+
+	} else {
+	    std::cout<<"We already have a field with the name "
+		     <<label.Data()<<std::endl;
+	}
+
+    } else {
+
+	std::cout<<"Expecting 6 words for the definition of the Bell field: "
+		 <<"Bell Label BPeak zMiddle orientationInt tubeRadius "<<std::endl;
+
+    }
+
+
+}
+
 
 void ShipFieldMaker::createFieldMap(const stringVect& inputLine)
 {
@@ -362,6 +467,8 @@ void ShipFieldMaker::setGlobalField(const stringVect& inputLine)
 	    if (aField) {
 		std::cout<<"Adding field "<<aLabel<<" to global"<<std::endl;
 		vectFields.push_back(aField);
+	    } else {
+		std::cout<<"Could not find the field "<<aLabel<<std::endl;
 	    }
 
 	}

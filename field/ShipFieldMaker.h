@@ -45,6 +45,18 @@ class ShipFieldMaker
     */
     void createUniform(const stringVect& inputLine);
 
+    //! Create the constant field based on information from the inputLine
+    /*!
+      \param [in] inputLine The space separated input line
+    */
+    void createConstant(const stringVect& inputLine);
+
+    //! Create the Bell field based on information from the inputLine
+    /*!
+      \param [in] inputLine The space separated input line
+    */
+    void createBell(const stringVect& inputLine);
+
     //! Create the field map based on information from the inputLine
     /*!
       \param [in] inputLine The space separated input line

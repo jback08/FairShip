@@ -20,10 +20,12 @@ keywords to denote what each line represents:
 1) "FieldMap" for using field maps to represent the magnetic field
 2) "CopyMap" for copying a previously defined field map to another location (saving memory)
 3) "Uniform" for creating a uniform magnetic field (no co-ordinate limits)
-4) "Composite" for combining two or more field types/sources
-5) "Global" for setting which (single or composite) field is the global one
-6) "Region" for setting a local field to a specific volume, including the global field
-7) "Local" for only setting a local field to a specific volume, ignoring the global field
+4) "Constant" for creating a uniform magnetic field with co-ordinate boundary limits
+5) "Bell" for creating the [Bell](ShipBellField.h) shaped magnetic field distribution
+6) "Composite" for combining two or more field types/sources
+7) "Global" for setting which (single or composite) field is the global one
+8) "Region" for setting a local field to a specific volume, including the global field
+9) "Local" for only setting a local field to a specific volume, ignoring the global field
 ```
 
 The syntax for each of the above options are:
@@ -103,7 +105,29 @@ Uniform Label Bx By Bz
 where Bx, By and Bz are the components of the uniform field (in Tesla),
 valid for any x,y,z co-ordinate value.
 
-4) Composite
+4) Constant
+
+```
+Constant Label xMin xMax yMin yMax zMin zMax Bx By Bz
+```
+
+where xMin, xMax are the co-ordinate limits along the x axis (in cm),
+similarly for the y and z axes, and Bx, By and Bz are the components
+of the uniform field in Tesla.
+
+5) Bell
+
+```
+Bell Label BPeak zMiddle orientInt tubeRad
+```
+
+where BPeak is the peak of the magnetic field (in Tesla), zMiddle is
+the z location of the centre of the field (cm), orientInt is an integer
+to specify if the field is aligned either along the x (2) or y (1) axes
+ (Bz = 0 always), and tubeRad is the radius of the tube (cm) inside the
+region which specifies the extent of the field (for Bx).
+
+6) Composite
 
 ```
 Composite CompLabel Label1 ... LabelN
@@ -112,7 +136,7 @@ Composite CompLabel Label1 ... LabelN
 where CompLabel is the label of the composite field, comprising of the fields
 named Label1 up to LabelN.
 
-5) Global
+7) Global
 
 ```
 Global Label1 .. LabelN
@@ -121,7 +145,7 @@ Global Label1 .. LabelN
 where Label1 to LabelN are the labels of the field(s) that are combined
 to represent the global one for the whole geometry.
 
-6) Region
+8) Region
 
 ```
 Region VolName FieldLabel
@@ -133,7 +157,7 @@ will include the global field if it has been defined earlier in the
 configuration file, i.e. any particle inside this volume will experience
 the superposition of the local field with the global one.
 
-7) Local
+9) Local
 
 ```
 Local VolName FieldLabel
