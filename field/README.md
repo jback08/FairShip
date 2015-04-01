@@ -81,6 +81,8 @@ was used to convert the RAL field maps for FairShip use.
 * [MuonFilterBFieldMap1.txt.gz](MuonFilterBFieldMap1.txt.gz) Using original co-ordinates for the steel
 * [MuonFilterBFieldMap2.txt.gz](MuonFilterBFieldMap2.txt.gz) Magnet C0 inner and outer gap moved from 0 to 2 cm
 * [MuonFilterBFieldMap3.txt.gz](MuonFilterBFieldMap3.txt.gz) Simplified overall magnet shape for manufacturing considerations with the 2 cm gap for magnet C0
+* [MuonFilterBFieldMap4.txt.gz](MuonFilterBFieldMap4.txt.gz) As map 3, but gaps between the magnets (A0, B0, C0, C4, ...) reduced from 30 cm to 10 cm
+* [MuonFilterBFieldMap5.txt.gz](MuonFilterBFieldMap5.txt.gz) As map 3, but using US1010 steel instead of grain-oriented steel
 
 Only one of these field maps should be used as the global field map in [BFieldSetup.txt](BFieldSetup.txt). 
 They need to be uncompressed before the simulation can be run; the [macro/run_simScript.py]
