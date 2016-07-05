@@ -6,6 +6,81 @@ read [the Git tutorial for SHiP](https://github.com/ShipSoft/FairShip/wiki/Git-T
 
 Let get started:
 
+1 December 2015: new DEV branches for FairSoft and FairRoot are put in place with simplified configurations scripts
+
+1. In case you use SLC6 where the GitHub cert is missing, first do (only once):
+
+    ```bash
+    mkdir ~/certs
+    curl http://curl.haxx.se/ca/cacert.pem -o ~/certs/cacert.pem
+    git config --global http.sslcainfo ~/certs/cacert.pem
+    ```
+
+2. Set several required shell variables, needed during the installation and running of the
+   different software packages. Put these in your shell's rc file (~/.bashrc or ~/.cshrc).
+   For bash:
+
+    ```bash
+    export SHIPSOFT=~/ShipSoft
+    export SIMPATH=$SHIPSOFT/FairSoftInst
+    export FAIRROOTPATH=$SHIPSOFT/FairRootInst
+    ```
+
+    or for the csh:
+
+    ```bash
+    setenv SHIPSOFT ~/ShipSoft
+    setenv SIMPATH ${SHIPSOFT}/FairSoftInst
+    setenv FAIRROOTPATH ${SHIPSOFT}/FairRootInst
+    ```
+
+3. Install [FairSoft]
+
+    ```bash
+    mkdir $SHIPSOFT
+    cd $SHIPSOFT
+    git clone -b dev https://github.com/ShipSoft/FairSoft.git
+    cd FairSoft
+    cat DEPENDENCIES
+    # Make sure all the required dependencies are installed
+    ./configure.sh
+    # accept ShipSoft default
+    # no, for experts
+    ```
+
+4. Install [FairRoot]
+
+    ```bash
+    cd $SHIPSOFT
+    git clone -b dev https://github.com/ShipSoft/FairRoot.git
+    cd FairRoot
+    mkdir build
+    ./configure.sh
+    ```
+
+5. Install the [SHIP](https://github.com/ShipSoft/FairShip.git) software:
+
+    ```bash
+    cd $SHIPSOFT (or at any other place XXX
+    git clone https://github.com/ShipSoft/FairShip.git
+    cd FairShip
+    ./configure.sh
+    
+    for only compiling
+    cd FairShipRun
+    make
+    
+    If you work on lxplus, after logon, you always have to do:
+    setenv xxx ${HOME}
+    setenv SHIPSOFT /afs/cern.ch/ship/sw/ShipSoft/dev
+    setenv FAIRROOTPATH ${SHIPSOFT}/FairRootInst
+    setenv SIMPATH      ${SHIPSOFT}/FairSoftInst
+    setenv FAIRSHIP ${xxx}/FairShip
+    source ${xxx}/FairShipRun/config.(c)sh
+    ```
+
+Old procedure, still valid for FairSoft and FairRoot master branches:
+
 1. In case you use SLC6 where the GitHub cert is missing, first do (only once):
 
     ```bash
@@ -41,7 +116,7 @@ Let get started:
     ```bash
     mkdir $SHIPSOFT
     cd $SHIPSOFT
-    git clone -b dev https://github.com/ShipSoft/FairSoft.git
+    git clone -b master https://github.com/ShipSoft/FairSoft.git
     cd FairSoft
     cat DEPENDENCIES
     # Make sure all the required dependencies are installed
@@ -59,7 +134,7 @@ Let get started:
 
     ```bash
     cd $SHIPSOFT
-    git clone -b dev https://github.com/ShipSoft/FairRoot.git
+    git clone -b master https://github.com/ShipSoft/FairRoot.git
     cd FairRoot
     mkdir build
     cd build
@@ -93,29 +168,37 @@ Let get started:
     )
     make
     . config.sh    [or source config.csh]
+    
+    If you work on lxplus, after logon, you always have to do:
+    setenv xxx ${HOME}
+    setenv SHIPSOFT /afs/cern.ch/ship/sw/ShipSoft
+    setenv FAIRROOTPATH ${SHIPSOFT}/FairRootInst
+    setenv SIMPATH      ${SHIPSOFT}/FairSoftInst
+    setenv FAIRSHIP ${xxx}/FairShip
+    source ${xxx}/FairShipRun/config.csh
     ```
 
 6. Now you can for example simulate some events, run reconstruction and analysis:
 
     ```bash
-    python $FAIRSHIP/macro/run_simScript.py --display
+    python $FAIRSHIP/macro/run_simScript.py 
     >> Macro finished succesfully.
-    >> Output file is  ship.10.0.Pythia8-TGeant4_D.root
+    >> Output file is  ship.10.0.Pythia8-TGeant4.root
 
-    python $FAIRSHIP/macro/ShipReco.py -f ship.10.0.Pythia8-TGeant4_D.root 
+    python $FAIRSHIP/macro/ShipReco.py -f ship.10.0.Pythia8-TGeant4.root -g geofile_full.10.0.Pythia8-TGeant4.root
     >> finishing pyExit
 
-    python $FAIRSHIP/macro/ShipAna.py -f ship.10.0.Pythia8-TGeant4_D_rec.root
+    python $FAIRSHIP/macro/ShipAna.py -f ship.10.0.Pythia8-TGeant4_rec.root -g geofile_full.10.0.Pythia8-TGeant4.root
     >> finished making plots
     ```
 
     Run the event display:
 
     ```bash
-    python -i $FAIRSHIP/macro/eventDisplay.py
-    // Click on "FairEventManager" (in the top-left pane)
-    // Click on the "Info" tab (on top of the bottom-left pane)
-    // Increase the "Current Event" to >0 to see the events
+    python -i $FAIRSHIP/macro/eventDisplay.py -f ship.10.0.Pythia8-TGeant4.root -g geofile_full.10.0.Pythia8-TGeant4.root
+    // use SHiP Event Display GUI 
+    // to switch on / off detectors (little trick to make it faster, main window, tick off Scenes/Geometry scene, then switch on / off detectors in SHiP Event Display GUI, then tick on again Scenes/Geometry scene)
+    // hit next event, or enter event number and hit return
     Use quit() or Ctrl-D (i.e. EOF) to exit
     ```
 7. Retrieving tagged versions:

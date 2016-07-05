@@ -18,12 +18,12 @@ class TClonesArray;
 class MagneticSpectrometer:public FairDetector
 {
   public:
-    MagneticSpectrometer(const char* name, const Double_t zMSC, const Double_t zSize, const Double_t FeSlab, const Double_t RpcW, const Double_t ArmW, const Double_t GapV, const Double_t MGap, const Double_t Mfield, Double_t HPTW, Double_t RetYokeH, Bool_t Active, const char* Title="MagneticSpectrometer");
+    MagneticSpectrometer(const char* name, const Double_t zMSC, const Double_t zSize, const Double_t FeSlab, const Double_t RpcW, const Double_t ArmW, const Double_t GapV, const Double_t MGap, const Double_t Mfield,  Double_t RetYokeH, Bool_t Active, const char* Title="MagneticSpectrometer");
     MagneticSpectrometer();
     virtual ~MagneticSpectrometer();
     
     void SetCoilParameters(Double_t CoilH, Double_t CoilW, Int_t N, Double_t CoilG);
-    
+
     void ConstructGeometry();
     
     /**      Initialization of the detector is done here    */
@@ -46,11 +46,12 @@ class MagneticSpectrometer:public FairDetector
     /**      This method is an example of how to add your own point
      *       of type muonPoint to the clones array
      */
+   
     ShipRpcPoint* AddHit(Int_t trackID, Int_t detID,
                          TVector3 pos, TVector3 mom,
                          Double_t time, Double_t length,
                          Double_t eLoss, Int_t pdgCode);
-    
+
     /** The following methods can be implemented if you need to make
      *  any optional action in your detector during the transport.
      */
@@ -66,6 +67,7 @@ class MagneticSpectrometer:public FairDetector
     virtual void   PreTrack() {;}
     virtual void   BeginEvent() {;}
 
+    void DecodeVolumeID(Int_t detID,int &nARM,int &nRPC);
     
 private:
     
@@ -94,7 +96,6 @@ protected:
     Double_t zSizeMS; //Dimension of the whole magnetic spectrometr (1st + 2nd arm + HPTs) alogn beam axis
     Double_t IronSlabWidth; // Width of the Iron Slabs
     Double_t RpcWidth; // Width of the Rpc planes
-    Double_t HPTWidth; // Width of the HPT planes
     Double_t ArmWidth; // Width of the Spectrometer Arms
     Double_t GapFromVessel; //distance between the end of the second arm of the spectrometer and the decay vessel
     Double_t MiddleGap; // distance between the two arms of the spectrometer

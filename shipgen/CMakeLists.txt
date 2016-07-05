@@ -25,11 +25,12 @@ ${SIMPATH}/lib
 link_directories( ${LINK_DIRECTORIES})
 
 set(SRCS
+Pythia8Generator.cxx
 Pythia6Generator.cxx
 tPythia6Generator.cxx
-Pythia8Generator.cxx
 HNLPythia8Generator.cxx
 GenieGenerator.cxx
+NuageGenerator.cxx
 NtupleGenerator.cxx
 MuonBackGenerator.cxx
 CosmicsGenerator.cxx

@@ -29,15 +29,16 @@ class MuonBackGenerator : public FairGenerator
  private:
   
  protected:
-  Float_t id,parentid,pythiaid,w,px,py,pz,vx,vy,vz;
+  Float_t id,parentid,pythiaid,w,px,py,pz,vx,vy,vz,ecut;
   TFile* fInputFile;    //! 
   FairLogger*  fLogger; //!   don't make it persistent, magic ROOT command
   TTree* fTree;         //! 
   int fNevents;
+  float f_zOffset;      //!
   int fn;
   Bool_t fPhiRandomize;
   Double_t fsmearBeam ;
-  ClassDef(MuonBackGenerator,1);
+  ClassDef(MuonBackGenerator,2);
 };
 
 #endif /* !PNDmuGENERATOR_H */

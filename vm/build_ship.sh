@@ -8,8 +8,14 @@ function num_proc() {
   elif [ `uname -s` == "Darwin" ] ; then
     N=`sysctl -n hw.ncpu`
   fi
-  logN=`echo "l($N)" | bc -l`
-  echo $logN/1+1| bc
+  if [ `which bc &> /dev/null` ] ; then
+    logN=`echo "l($N)" | bc -l`
+    echo $logN/1+1| bc
+  else
+    result=$(( $N/2 ))
+    [ $result -ge 8 ] && result=8
+    echo $result
+  fi
 }
 
 BUILD_DIR="/opt/ship/FairShip/build"

@@ -1,10 +1,9 @@
 #!/bin/bash
-echo $BASH_SOURCE, $0
 SCRIPT_NAME=$0
-[ -z "SCRIPT_NAME" ] && SCRIPT_NAME=$BASH_SOURCE
+echo $BASH_SOURCE
+[[ -z "SCRIPT_NAME" || "$SCRIPT_NAME" == "bash" ]] && SCRIPT_NAME=$BASH_SOURCE
 BASEDIR=$(echo $(cd $(dirname "$SCRIPT_NAME")/.. && pwd -P))
-IMAGE="anaderi/ocean:latest"
-source $BASEDIR/vm/_functions.sh
+source $BASEDIR/vm/_common.sh
 
 if [ "$1" = "diag" ] ; then
     echo "=== DIAGNOSTIC ==="

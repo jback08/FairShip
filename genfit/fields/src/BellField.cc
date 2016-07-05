@@ -24,7 +24,7 @@ using std::endl;
 Double_t kilogauss = 1.;
 Double_t tesla     = 10*kilogauss;
 Double_t cm  = 1;       // cm
-Double_t m   = 100*cm;  //  m
+Double_t meter   = 100*cm;  //  m
 Double_t mm  = 0.1*cm;  //  mm
 
 // implementation of Bellshape field for Ship
@@ -40,8 +40,9 @@ namespace genfit {
   { ; }
 
 TVector3 BellField::get(const TVector3& pos) const {
-  Double_t zlocal=(pos.z()-fMiddle)/100.;
-  TVector3 field_(0.,fPeak/(1.+pow(fabs(zlocal)/2.1,6.)),0.);
+  Double_t bx,by,bz; 
+  get(pos.X(),pos.Y(),pos.Z(),bx,by,bz);
+  TVector3 field_(bx,by,bz);
   return field_;
 }
 
@@ -55,7 +56,7 @@ void BellField::get(const double& x, const double& y, const double& z, double& B
    //new field based on simulation of Davide Tommasini (22/1/2015)
 
     //field in box 20 cm larger than inner tube.
-    if ( (fabs(x)<2.7*m) && (fabs(y)<fBtube+0.2*m) )  {
+    if ( (fabs(x)<2.7*meter) && (fabs(y)<fBtube+0.2*meter) )  {
       if (zlocal<3.8) {
         Bx=0.14361*exp( -0.5 * pow((zlocal-0.45479E-01)/2.5046,2.));
       }else if (zlocal<11.9) {

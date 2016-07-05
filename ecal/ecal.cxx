@@ -31,6 +31,7 @@
 #include "TGeoBBox.h"
 #include "TGeoPgon.h"
 #include "TGeoTube.h"
+#include "TGeoEltu.h"
 #include "TGeoMatrix.h"
 #include "TList.h"
 
@@ -64,7 +65,8 @@ ecal::ecal()
     fDY(0.),
     fModuleSize(0.),
     fZEcal(0.),
-    fKeepR(0.),
+    fSemiX(0.),
+    fSemiY(0.),
     fThicknessLead(0.),
     fThicknessScin(0.),
     fThicknessTyvk(0.),
@@ -139,7 +141,8 @@ ecal::ecal(const char* name, Bool_t active, const char* fileGeo)
     fDY(0.),
     fModuleSize(0.),
     fZEcal(0.),
-    fKeepR(0.),
+    fSemiX(0.),
+    fSemiY(0.),
     fThicknessLead(0.),
     fThicknessScin(0.),
     fThicknessTyvk(0.),
@@ -216,7 +219,8 @@ ecal::ecal(const char* name, Bool_t active, const char* fileGeo)
   fPosIndex=0;
   fDebug="";
 
-  fKeepR=fInf->GetVariableStrict("contr");
+  fSemiX=fInf->GetVariableStrict("xsemiaxis");
+  fSemiY=fInf->GetVariableStrict("ysemiaxis");
   fHoleRad=fInf->GetVariableStrict("holeradius");
   fFiberRad=fInf->GetVariableStrict("fiberradius");
   fThicknessSteel=fInf->GetVariableStrict("steel");
@@ -438,6 +442,9 @@ Bool_t  ecal::ProcessHits(FairVolume* vol)
       gMC->CurrentVolOffID(1, cell); cell--;
     }
     Int_t id=(my*100+mx)*100+cell+1;
+    if (id<0){
+      cout << "neg id "<<mx<<" "<<my<<" "<<cell<<" "<<gMC->CurrentVolName()<<" "<<gMC->CurrentVolOffName(1)<<" "<<gMC->CurrentVolOffName(2)<<endl;
+    }
 /*   
     Float_t rx; Float_t ry; Int_t ten;
     GetCellCoordInf(id, rx, ry, ten); rx--; ry--;
@@ -711,11 +718,14 @@ void ecal::ConstructGeometry()
 
   /** Initialize all media **/
   InitMedia();
-  par[0]=0;
-  par[1]=fKeepR;
+  par[0]=fSemiX;
+  par[1]=fSemiY;
   par[2]=moduleth/2.0+0.1;
-  volume=gGeoManager->Volume("Ecal", "TUBE",  gGeoManager->GetMedium("SensVacuum")->GetId(), par, 3);
+  volume=gGeoManager->Volume("Ecal", "BOX",  gGeoManager->GetMedium("SensVacuum")->GetId(), par, 3);
   gGeoManager->Node("Ecal", 1, top->GetName(), 0.0,0.0, fZEcal+par[2]-0.05, 0, kTRUE, buf, 0);
+  volume->SetVisLeaves(kTRUE);
+  volume->SetVisContainers(kFALSE);
+  volume->SetVisibility(kFALSE);
   AddSensitiveVolume(volume);
   fStructureId=volume->GetNumber();
 
@@ -860,6 +870,7 @@ void ecal::ConstructModule(Int_t type)
 
 //  TGeoVolume* modulev=new TGeoVolumeAssembly(nm);
   TGeoVolume* modulev=gGeoManager->Volume(nm.Data(), "BOX",  gGeoManager->GetMedium("ECALAir")->GetId(), par, 3);
+  modulev->SetLineColor(kYellow);
 
   //Adding cells into module
   for(i=0;i<type;i++)
@@ -901,6 +912,7 @@ void ecal::ConstructModuleSimple(Int_t type)
 
 //  TGeoVolume* modulev=new TGeoVolumeAssembly(nm);
   TGeoVolume* modulev=gGeoManager->Volume(nm.Data(), "BOX",  gGeoManager->GetMedium("ECALAir")->GetId(), par, 3);
+  modulev->SetLineColor(kYellow);
 
   //Adding cells into module
   for(i=0;i<type;i++)

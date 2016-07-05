@@ -1,6 +1,14 @@
 import ROOT,time,os,sys
-nJob = 2
+nJob   = 2
+nMult  = 10 # number of events / muon
+muonIn = '$SHIPSOFT/data/muConcrete.root'
+nPerJob = 20000
+
 if len(sys.argv)>1: nJob = int(sys.argv[1])
+if len(sys.argv)>2: nMult = int(sys.argv[2])
+if len(sys.argv)>3: muonIn = sys.argv[3]
+if len(sys.argv)>4: nPerJob = int(sys.argv[4])
+
 #
 from array import array
 PDG = ROOT.TDatabasePDG.Instance()
@@ -22,7 +30,6 @@ def getMasssq(pid):
 R = int(time.time()%900000000)
 myPythia.SetMRPY(1,R)
 mutype = {-13:'gamma/mu+',13:'gamma/mu-'}
-nMult = 10 # number of events / muon
 
 # DIS event
 # incoming muon,      id:px:py:pz:x:y:z:w
@@ -35,7 +42,7 @@ dPart       = ROOT.TClonesArray("TVectorD")
 dPartBranch = dTree.Branch("Particles",dPart,32000,-1)
 
 # read file with muons hitting concrete wall
-fin = ROOT.TFile('$SHIPSOFT/data/muConcrete.root') # id:px:py:pz:x:y:z:w
+fin = ROOT.TFile(muonIn) # id:px:py:pz:x:y:z:w
 sTree = fin.muons
 
 def rotate(ctheta,stheta,cphi,sphi,px,py,pz):
@@ -47,13 +54,19 @@ def rotate(ctheta,stheta,cphi,sphi,px,py,pz):
   pyr=sphi*px1+cphi*py
   return pxr,pyr,pzr
 
-nPerJob = 20000
 nTOT = sTree.GetEntries()
-nStart = max(0, nTOT-20000*(nJob+1) )
+
+nStart = nPerJob*nJob
+nEnd   = min(nTOT,nStart + nPerJob)
+if muonIn.find('Concrete')<0: 
+ nStart = 0
+ nEnd   = nTOT
 
 # stop pythia printout during loop
 myPythia.SetMSTU(11, 11)
-for k in range(nStart,nTOT-20000*nJob): 
+print "start production ",nStart,nEnd
+nMade = 0
+for k in range(nStart,nEnd): 
   rc = sTree.GetEvent(k)
   # make n events / muon
   px,py,pz = sTree.px,sTree.py,sTree.pz
@@ -77,22 +90,20 @@ for k in range(nStart,nTOT-20000*nJob):
 # remove all unnecessary stuff
      myPythia.Pyedit(2)
      for itrk in range(1,myPythia.GetN()+1):
-      did = abs(myPythia.GetK(itrk,2))
+      did = myPythia.GetK(itrk,2)
       dpx,dpy,dpz = rotate(ctheta,stheta,cphi,sphi,myPythia.GetP(itrk,1),myPythia.GetP(itrk,2),myPythia.GetP(itrk,3))
-      E = ROOT.TMath.Sqrt(getMasssq(did)+p*p)
+      psq =   dpx**2+dpy**2+dpz**2
+      E = ROOT.TMath.Sqrt(getMasssq(did)+psq)
       m = array('d',[did,dpx,dpy,dpz,E])
       part = ROOT.TVectorD(5,m)
 # copy to branch
       nPart = dPart.GetEntries()
       if dPart.GetSize() == nPart: dPart.Expand(nPart+10)
       dPart[nPart] = part
-     dPartBranch.Fill()
-     iMuonBranch.Fill()
+     nMade+=1
+     if nMade%10000==0: print 'made so far ',nMade
      dTree.Fill()
 fout.cd()  
 dTree.Write()
 myPythia.SetMSTU(11, 6)
-print "created ",nStart,' - ',nTOT-20000*nJob," events"
-
-
-
+print "created nJob ",nJob,':',nStart,' - ',nEnd," events"

@@ -20,7 +20,14 @@ Bool_t MuonBackGenerator::Init(const char* fileName) {
 Bool_t MuonBackGenerator::Init(const char* fileName, const int firstEvent, const Bool_t fl = false ) {
   fLogger = FairLogger::GetLogger();
   fLogger->Info(MESSAGE_ORIGIN,"Opening input file %s",fileName);
+  if (0 == strncmp("/eos",fileName,4) ) {
+     char stupidCpp[100];
+     strcpy(stupidCpp,"root://eoslhcb.cern.ch/");
+     strcat(stupidCpp,fileName);
+     fInputFile  = TFile::Open(stupidCpp); 
+  }else{
   fInputFile  = new TFile(fileName);
+  }
   if (fInputFile->IsZombie()) {
     fLogger->Fatal(MESSAGE_ORIGIN, "Error opening the Signal file");
   }
@@ -34,14 +41,24 @@ Bool_t MuonBackGenerator::Init(const char* fileName, const int firstEvent, const
   fTree->SetBranchAddress("id",&id);                // particle id
   fTree->SetBranchAddress("parentid",&parentid);    // parent id, could be different
   fTree->SetBranchAddress("pythiaid",&pythiaid);    // pythiaid original particle
-  fTree->SetBranchAddress("ecut",&pythiaid);    // energy cut used in simulation
+  fTree->SetBranchAddress("ecut",&ecut);    // energy cut used in simulation
   fTree->SetBranchAddress("w",&w);                  // weight of event
-  fTree->SetBranchAddress("x",&vx);   // position
-  fTree->SetBranchAddress("y",&vy);
-  fTree->SetBranchAddress("z",&vz);
-  fTree->SetBranchAddress("px",&px);   // momentum
-  fTree->SetBranchAddress("py",&py);
-  fTree->SetBranchAddress("pz",&pz);
+//  check if ntuple has information of momentum at origin
+  if (fTree->GetListOfLeaves()->GetSize() < 17){  
+   fTree->SetBranchAddress("x",&vx);   // position with respect to startOfTarget at -89.27m
+   fTree->SetBranchAddress("y",&vy);
+   fTree->SetBranchAddress("z",&vz);
+   fTree->SetBranchAddress("px",&px);   // momentum
+   fTree->SetBranchAddress("py",&py);
+   fTree->SetBranchAddress("pz",&pz);
+  }else{
+   fTree->SetBranchAddress("ox",&vx);   // position with respect to startOfTarget at -50m
+   fTree->SetBranchAddress("oy",&vy);
+   fTree->SetBranchAddress("oz",&vz);
+   fTree->SetBranchAddress("opx",&px);   // momentum
+   fTree->SetBranchAddress("opy",&py);
+   fTree->SetBranchAddress("opz",&pz);
+  } 
   return kTRUE;
 }
 // -----   Destructor   ----------------------------------------------------
@@ -82,6 +99,7 @@ Bool_t MuonBackGenerator::ReadEvent(FairPrimaryGenerator* cpg)
     vx = vx + dx/100.; 
     vy = vy + dy/100.; 
   }
+  cpg->AddTrack(int(id),px,py,pz,vx*100.,vy*100.,vz*100.,-1.,false,e,pythiaid,parentid);
   cpg->AddTrack(int(id),px,py,pz,vx*100.,vy*100.,vz*100.,-1.,true,e,tof,w);
   return kTRUE;
 }
