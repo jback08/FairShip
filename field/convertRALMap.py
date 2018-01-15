@@ -1,6 +1,6 @@
 #!/bin/python
 
-# Python script to convert B field maps into text and ROOT files for FairShip.
+# Python script to convert RAL B field maps into text and ROOT files for FairShip.
 # Reduce the number of decimal places to try to reduce the file size.
 # Also add to the file info about the binning, offsets etc..
 # The field maps should have 10 cm binning resolution. 
