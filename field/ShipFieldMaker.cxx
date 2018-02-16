@@ -130,6 +130,11 @@ void ShipFieldMaker::makeFields(const std::string& inputFile)
 		    // Create the field map
 		    this->createFieldMap(lineVect);
 
+		} else if (keyWord.Contains("symfieldmap")) {
+
+		    // Create the symmetric field map
+		    this->createFieldMap(lineVect, kTRUE);
+  
 		} else if (keyWord.Contains("copymap")) {
 
 		    // Copy (& translate) the field map
@@ -308,7 +313,7 @@ void ShipFieldMaker::createBell(const stringVect& inputLine)
 }
 
 
-void ShipFieldMaker::createFieldMap(const stringVect& inputLine)
+void ShipFieldMaker::createFieldMap(const stringVect& inputLine, Bool_t useSymmetry)
 {
 
     size_t nWords = inputLine.size();
@@ -344,11 +349,15 @@ void ShipFieldMaker::createFieldMap(const stringVect& inputLine)
 	    }
 
 	    if (verbose_) {
-		std::cout<<"Creating map field "<<label.Data()<<" using "<<fullFileName<<std::endl;
+       	        if (useSymmetry) {
+		    std::cout<<"Creating symmetric map field "<<label.Data()<<" using "<<fullFileName<<std::endl;
+		} else {
+		    std::cout<<"Creating map field "<<label.Data()<<" using "<<fullFileName<<std::endl;
+		}
 	    }
 	    
 	    ShipBFieldMap* mapField = new ShipBFieldMap(label.Data(), fullFileName, 
-							x0, y0, z0, phi, theta, psi);
+							x0, y0, z0, phi, theta, psi, useSymmetry);
 	    theFields_[label] = mapField;
 
 	} else {
@@ -361,7 +370,7 @@ void ShipFieldMaker::createFieldMap(const stringVect& inputLine)
     } else {
 
 	std::cout<<"Expecting 3, 6 or 9 words for the definition of the field map: "
-		 <<"FieldMap Label mapFileName [x0 y0 z0] [[phi theta psi]]"<<std::endl;
+		 <<"(Sym)FieldMap Label mapFileName [x0 y0 z0] [[phi theta psi]]"<<std::endl;
 
     }
 

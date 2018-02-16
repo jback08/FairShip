@@ -30,16 +30,17 @@ class ShipBFieldMap : public TVirtualMagField
       \param [in] theta The second Euler rotation angle about the new x axis (degrees)
       \param [in] psi The third Euler rotation angle about the new z axis (degrees)
       \param [in] scale The field magnitude scaling factor (default = 1.0)
+      \param [in] isSymmetric Boolean to specify if we have quadrant symmetry (default = false)
     */
     ShipBFieldMap(const std::string& label, const std::string& mapFileName,
 		  Double_t xOffset = 0.0, Double_t yOffset = 0.0, Double_t zOffset = 0.0,
 		  Double_t phi = 0.0, Double_t theta = 0.0, Double_t psi = 0.0,
-		  Double_t scale = 1.0);
+		  Double_t scale = 1.0, Bool_t isSymmetric = kFALSE);
 
     //! Copy constructor with a new global transformation. Use this if you want
     //! to reuse the same field map information elsewhere in the geometry
     /*! 
-      \param [in] rhs The ShipBFieldMap object to be copied
+      \param [in] rhs The ShipBFieldMap object to be copied (retaining any symmetry)
       \param [in] newName The new description or title of the field
       \param [in] newXOffset The new global offset x co-ordinate (cm)
       \param [in] newYOffset The new global offset y co-ordinate (cm)
@@ -106,6 +107,13 @@ class ShipBFieldMap : public TVirtualMagField
       \param [in] scale The scaling factor for the field magnitude
     */
     void SetScale(Double_t scale) {scale_ = scale;}
+
+    //! Set the boolean to specify if we have quadrant symmetry
+    /*!
+      \param [in] isSymmetric Boolean to specify if we have quadrant symmetry
+    */
+    void UseSymmetry(Bool_t flag) {isSymmetric_ = flag;}
+
 
     //! Get the name of the map file
     /*!
@@ -250,6 +258,12 @@ class ShipBFieldMap : public TVirtualMagField
       \returns the scaling factor for the field magnitude
     */
     Double_t GetScale() const {return scale_;}
+
+    //! Get the boolean flag to specify if we have quadrant symmetry
+    /*!
+      \returns the boolean specifying if we have quadrant symmetry
+    */
+    Bool_t HasSymmetry() const {return isSymmetric_;}
 
     //! Get the boolean flag to specify if we are a "copy"
     /*!
@@ -407,6 +421,9 @@ class ShipBFieldMap : public TVirtualMagField
 
     //! The B field magnitude scaling factor
     Double_t scale_;
+
+    //! The boolean specifying if we have quadrant symmetry
+    Bool_t isSymmetric_;
 
     //! The combined translation and rotation transformation
     TGeoMatrix* theTrans_;

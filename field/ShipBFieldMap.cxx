@@ -20,7 +20,8 @@ ShipBFieldMap::ShipBFieldMap(const std::string& label,
 			     Double_t phi,
 			     Double_t theta,
 			     Double_t psi,
-			     Double_t scale) : 
+			     Double_t scale,
+			     Bool_t isSymmetric) : 
     TVirtualMagField(label.c_str()),
     fieldMap_(new std::vector<TVector3>()),
     mapFileName_(mapFileName),
@@ -40,6 +41,7 @@ ShipBFieldMap::ShipBFieldMap(const std::string& label,
     theta_(theta),
     psi_(psi),
     scale_(scale),
+    isSymmetric_(isSymmetric),
     theTrans_(0),
     Tesla_(10.0)
 {
@@ -89,6 +91,7 @@ ShipBFieldMap::ShipBFieldMap(const std::string& newName, const ShipBFieldMap& rh
     theta_(newTheta),
     psi_(newPsi),
     scale_(newScale),
+    isSymmetric_(rhs.isSymmetric_),
     theTrans_(0),
     Tesla_(10.0)
 {
@@ -114,6 +117,31 @@ void ShipBFieldMap::Field(const Double_t* position, Double_t* B)
     Double_t x = localCoords[0];
     Double_t y = localCoords[1];
     Double_t z = localCoords[2];
+
+    // Now check to see if we have x-y quadrant symmetry (z has no symmetry):
+    // Bx is antisymmetric in x and y, By is symmetric and Bz has no symmetry
+    // so only Bx can change sign. This can happen if either x < 0 or y < 0:
+    // 1. x > 0, y > 0: Bx = Bx
+    // 2. x > 0, y < 0: Bx = -Bx
+    // 3. x < 0, y > 0: Bx = -Bx
+    // 4. x < 0, y < 0: Bx = Bx
+
+    Double_t BxSign(1.0);
+    if (isSymmetric_) {
+
+      // The field map co-ordinates only contain x > 0 and y > 0, i.e. we
+      // are using x-y quadrant symmetry. If the local x or y coordinates 
+      // are negative we need to change their sign and keep track of the 
+      // adjusted sign of Bx which we use as a multiplication factor at the end
+      if (x < 0.0) {
+	x = -x; BxSign *= -1.0;
+      }
+
+      if (y < 0.0) {
+	y = -y; BxSign *= -1.0;
+      }
+
+    }
 
     // Initialise the B field components to zero
     B[0] = 0.0;
@@ -162,7 +190,7 @@ void ShipBFieldMap::Field(const Double_t* position, Double_t* B)
 
     // Finally get the magnetic field components using trilinear interpolation
     // and scale with the appropriate multiplication factor (default = 1.0)
-    B[0] = this->BInterCalc(ShipBFieldMap::xAxis)*scale_;
+    B[0] = this->BInterCalc(ShipBFieldMap::xAxis)*scale_*BxSign;
     B[1] = this->BInterCalc(ShipBFieldMap::yAxis)*scale_;
     B[2] = this->BInterCalc(ShipBFieldMap::zAxis)*scale_;
 
